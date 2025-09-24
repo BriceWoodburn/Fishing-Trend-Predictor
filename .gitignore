@@ -205,3 +205,14 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# --- Project-specific ignores ---
+
+# Local MySQL config files (if you ever export .cnf files with credentials)
+*.cnf
+
+# Raw data files (optional — keep out big CSVs you don’t want tracked)
+data/*.csv
+
+# Logs
+*.log
