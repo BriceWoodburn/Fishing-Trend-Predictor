@@ -8,6 +8,4 @@ print("✅ All libraries installed successfully!")
 
 # to launch the virtual environment -> venv\Scripts\activate
 # to get into the correct pyton interpreter -> Ctrl+Shift+P then select Python: Select Interpreter
-# to launch react server -> make sure you have the correct file path -> npm run dev
-            # right click on the fishing-trend-predictor for react and copy file path
-            # in terminal type cd then paste the file path
+# to launch fastapi server -> uvicorn app:app --reload

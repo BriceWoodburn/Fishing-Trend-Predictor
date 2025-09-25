@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fishing Tracker</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h1>Fishing Tracker</h1>
+  
+  <form id="catchForm">
+    <input type="date" name="date" placeholder="Date" />
+    <input type="time" name="time" placeholder="Time" />
+    <input type="text" name="location" placeholder="Location" required />
+    <input type="text" name="species" placeholder="Species" required />
+    <input type="number" step="0.01" name="length_in" placeholder="Length (inches)" required />
+    <input type="number" step="0.01" name="weight_lbs" placeholder="Weight (lbs)" required />
+    <input type="text" name="weather" placeholder="Weather" />
+    <input type="text" name="bait" placeholder="Bait" />
+    <button type="submit">Log Catch</button>
+  </form>
+
+  <h2>All Catches</h2>
+  <table id="catchesTable">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Location</th>
+        <th>Species</th>
+        <th>Length (in)</th>
+        <th>Weight (lbs)</th>
+        <th>Weather</th>
+        <th>Bait</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script src="script.js"></script>
+</body>
+</html>
