@@ -4,6 +4,8 @@ from pydantic import BaseModel
 from supabase import create_client, Client
 from datetime import datetime
 from typing import Optional
+import traceback
+import sys
 
 # ---------------- Supabase Setup ----------------
 url = "https://fczfpqfwcxfhyakgggbf.supabase.co"
@@ -67,14 +69,22 @@ def delete_catch(catch_id: int):
     try:
         response = supabase.table("catches").delete().eq("id", catch_id).execute()
 
-        # The modern client returns an object with .data and .error
-        if response.error:
-            raise HTTPException(status_code=400, detail=str(response.error))
-
         if not response.data or len(response.data) == 0:
             return {"success": False, "message": "Catch not found"}
 
         return {"success": True, "message": "Catch deleted successfully"}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        # Log full traceback to the backend console
+        print("ERROR in delete_catch:", e, file=sys.stderr)
+        traceback.print_exc()
+
+        # Still send useful info to the frontend
+        raise HTTPException(status_code=500, detail=f"Delete failed: {str(e)}")
+    
+@app.put("/edit-row")
+async def edit_row(catch_id: int, catch: Catch):
+    try:
+        row_to_upadte = supabase.table("catches").update(catch.dict()).eq("id", catch_id).execute()
+    except Exception as error:
+        print("Error in the edit_row function:" + str(error))

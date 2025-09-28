@@ -20,7 +20,6 @@ document.getElementById("catchForm").addEventListener("submit", async (e) => {
 
     const result = await res.json();
     if (result.success) {
-      alert("✅ Catch logged!");
       e.target.reset(); // clear the form
       loadCatches();
     } else {
