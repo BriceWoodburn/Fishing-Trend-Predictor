@@ -49,7 +49,10 @@ async function loadCatches() {
         <td>${c.weight_lbs}</td>
         <td>${c.weather || ""}</td>
         <td>${c.bait || ""}</td>
-        <td><button onclick="deleteCatch(${c.id})">Delete</button></td>
+        <td>
+          <button onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
+          <button onclick='deleteCatch(${c.id})'>Delete</button>
+        </td>
       `;
       tbody.appendChild(tr);
     });
@@ -78,6 +81,64 @@ async function deleteCatch(id) {
   }
 }
 
+
+// Open modal and pre-fill values
+function openEditForm(catchData) {
+  document.getElementById("editModal").style.display = "block";
+
+  // populate fields
+  document.getElementById("editId").value = catchData.id;
+  document.getElementById("editDate").value = catchData.date || "";
+  document.getElementById("editTime").value = catchData.time || "";
+  document.getElementById("editLocation").value = catchData.location || "";
+  document.getElementById("editSpecies").value = catchData.species || "";
+  document.getElementById("editLength").value = catchData.length_in || "";
+  document.getElementById("editWeight").value = catchData.weight_lbs || "";
+  document.getElementById("editWeather").value = catchData.weather || "";
+  document.getElementById("editBait").value = catchData.bait || "";
+}
+
+
+// Close modal
+function closeEditForm() {
+  document.getElementById("editModal").style.display = "none";
+}
+
+// Handle save
+document.getElementById("editForm").addEventListener("submit", async (e) => {
+  e.preventDefault(); // stop the page from reloading
+
+  const id = document.getElementById("editId").value;
+
+  const updatedCatch = {
+    date: document.getElementById("editDate").value,
+    time: document.getElementById("editTime").value,
+    location: document.getElementById("editLocation").value,
+    species: document.getElementById("editSpecies").value,
+    length_in: parseFloat(document.getElementById("editLength").value),
+    weight_lbs: parseFloat(document.getElementById("editWeight").value),
+    weather: document.getElementById("editWeather").value,
+    bait: document.getElementById("editBait").value,
+  };
+
+  try {
+    const res = await fetch(`${backendUrl}/edit-catch/${id}`, {
+  method: "PUT",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify(updatedCatch),
+});
+
+
+    if (res.ok) {
+      closeEditForm();
+      loadCatches(); // refresh table
+    } else {
+      console.error("Failed to update row");
+    }
+  } catch (err) {
+    console.error("Error:", err);
+  }
+});
 
 // Load catches on page load
 loadCatches();

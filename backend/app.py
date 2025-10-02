@@ -82,9 +82,17 @@ def delete_catch(catch_id: int):
         # Still send useful info to the frontend
         raise HTTPException(status_code=500, detail=f"Delete failed: {str(e)}")
     
-@app.put("/edit-row")
-async def edit_row(catch_id: int, catch: Catch):
+@app.put("/edit-catch/{catch_id}")
+async def edit_catch(catch_id: int, catch: Catch):
     try:
-        row_to_upadte = supabase.table("catches").update(catch.dict()).eq("id", catch_id).execute()
+        response = (
+            supabase.table("catches")
+            .update(catch.dict(exclude={"id"}))  # don’t allow id updates
+            .eq("id", catch_id)
+            .execute()
+        )
+
+        return {"success": True, "data": response.data}
+
     except Exception as error:
-        print("Error in the edit_row function:" + str(error))
+        raise HTTPException(status_code=500, detail=str(error))

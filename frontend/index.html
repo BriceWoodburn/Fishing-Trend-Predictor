@@ -36,6 +36,44 @@
     </thead>
     <tbody></tbody>
   </table>
+  
+<!-- Edit Modal -->
+<div id="editModal" style="display:none; position:fixed; top:0; left:0; 
+    width:100%; height:100%; background:rgba(0,0,0,0.5);">
+  <div style="background:white; padding:20px; margin:100px auto; width:300px; border-radius:8px;">
+    <h3>Edit Catch</h3>
+    <form id="editForm">
+      <input type="hidden" id="editId">
+
+      <label>Date:</label>
+      <input type="date" id="editDate"><br><br>
+
+      <label>Time:</label>
+      <input type="time" id="editTime"><br><br>
+
+      <label>Location:</label>
+      <input type="text" id="editLocation"><br><br>
+
+      <label>Species:</label>
+      <input type="text" id="editSpecies"><br><br>
+
+      <label>Length (inches):</label>
+      <input type="number" step="0.01" id="editLength" required><br><br>
+
+      <label>Weight (lbs):</label>
+      <input type="number" step="0.01" id="editWeight" required><br><br>
+
+      <label>Weather:</label>
+      <input type="text" id="editWeather"><br><br>
+
+      <label>Bait:</label>
+      <input type="text" id="editBait"><br><br>
+
+      <button type="submit">Save</button>
+      <button type="button" onclick="closeEditForm()">Cancel</button>
+    </form>
+  </div>
+</div>
 
   <script src="script.js"></script>
 </body>
