@@ -6,6 +6,8 @@ from datetime import datetime
 from typing import Optional
 import traceback
 import sys
+import matplotlib.pyplot as plt
+import numpy as np
 
 # ---------------- Supabase Setup ----------------
 url = "https://fczfpqfwcxfhyakgggbf.supabase.co"
@@ -59,7 +61,7 @@ def log_catch(catch: Catch):
 @app.get("/catches")
 def get_catches():
     try:
-        response = supabase.table("catches").select("*").execute()
+        response = supabase.table("catches").select("*").order("id", desc=False).execute()
         return {"data": response.data}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
@@ -94,5 +96,13 @@ async def edit_catch(catch_id: int, catch: Catch):
 
         return {"success": True, "data": response.data}
 
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
+    
+
+@app.get("/display-chart")
+async def display_chart(species: str):
+    try:
+        responce = (supabase.table("catches").select("species").execute())
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
