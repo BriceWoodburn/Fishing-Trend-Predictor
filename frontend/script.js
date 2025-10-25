@@ -1,5 +1,9 @@
 const backendUrl = "http://127.0.0.1:8000"; // replace with your deployed backend if needed
 
+//chart variables
+let fishChartInstance = null;
+let timeChartInstance = null;
+
 // Submit new catch
 document.getElementById("catchForm").addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -7,7 +11,6 @@ document.getElementById("catchForm").addEventListener("submit", async (e) => {
   const formData = new FormData(e.target);
   const catchData = Object.fromEntries(formData);
 
-  // Optional: default date/time to now
   if (!catchData.date) catchData.date = new Date().toISOString().slice(0, 10);
   if (!catchData.time) catchData.time = new Date().toLocaleTimeString('en-GB', { hour12: false });
 
@@ -19,9 +22,12 @@ document.getElementById("catchForm").addEventListener("submit", async (e) => {
     });
 
     const result = await res.json();
+
     if (result.success) {
-      e.target.reset(); // clear the form
-      loadCatches();
+      e.target.reset();
+      await loadCatches();
+      await loadChart();
+      await loadTimeChart();
     } else {
       alert("❌ Error logging catch: " + JSON.stringify(result));
     }
@@ -30,36 +36,37 @@ document.getElementById("catchForm").addEventListener("submit", async (e) => {
   }
 });
 
-// Load and display catches
 async function loadCatches() {
-  try {
-    const res = await fetch(`${backendUrl}/catches`);
-    const data = await res.json();
-    const tbody = document.querySelector("#catchesTable tbody");
-    tbody.innerHTML = "";
+  const res = await fetch(`${backendUrl}/catches`);
+  const json = await res.json();
+  const tbody = document.querySelector("#catchesTable tbody");
+  tbody.innerHTML = "";
 
-    data.data.forEach(c => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td>${c.date}</td>
-        <td>${c.time}</td>
-        <td>${c.location}</td>
-        <td>${c.species}</td>
-        <td>${c.length_in}</td>
-        <td>${c.weight_lbs}</td>
-        <td>${c.weather || ""}</td>
-        <td>${c.bait || ""}</td>
-        <td>
-          <button onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
-          <button onclick='deleteCatch(${c.id})'>Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-  } catch (err) {
-    console.error("Error loading catches:", err);
-  }
+  json.data.forEach(c => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${c.date}</td>
+      <td>${c.time}</td>
+      <td>${c.location}</td>
+      <td>${c.species}</td>
+      <td>${c.length_in}</td>
+      <td>${c.weight_lbs}</td>
+      <td>${c.weather || ""}</td>
+      <td>${c.bait || ""}</td>
+      <td>
+        <button onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
+        <button onclick='deleteCatch(${c.id})'>Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  // Refresh charts **after** table is loaded
+  await loadChart();
+  await loadTimeChart();
 }
+
+
 
 // Delete a catch by ID
 async function deleteCatch(id) {
@@ -140,5 +147,90 @@ document.getElementById("editForm").addEventListener("submit", async (e) => {
   }
 });
 
-// Load catches on page load
+async function loadChart() {
+  const res = await fetch(`${backendUrl}/catches`);
+  const json = await res.json();
+  const data = json.data;
+
+  if (!data || data.length === 0) return;
+
+  const speciesCounts = {};
+  data.forEach(c => {
+    speciesCounts[c.species] = (speciesCounts[c.species] || 0) + 1;
+  });
+
+  const species = Object.keys(speciesCounts);
+  const counts = Object.values(speciesCounts);
+
+  const ctx = document.getElementById("fishChart").getContext("2d");
+
+  // Destroy old chart if it exists
+  if (fishChartInstance) fishChartInstance.destroy();
+
+  fishChartInstance = new Chart(ctx, {
+    type: "bar",
+    data: {
+      labels: species,
+      datasets: [{
+        label: "Number of Fish Caught",
+        data: counts,
+        backgroundColor: "rgba(54, 162, 235, 0.5)",
+        borderColor: "rgba(54, 162, 235, 1)",
+        borderWidth: 1
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: { y: { beginAtZero: true } }
+    }
+  });
+}
+
+async function loadTimeChart() {
+  const res = await fetch(`${backendUrl}/catches`);
+  const json = await res.json();
+  const data = json.data;
+
+  if (!data || data.length === 0) return;
+
+  const catchesByDate = {};
+  data.forEach(c => {
+    const date = c.date ? c.date.split("T")[0] : "Unknown";
+    catchesByDate[date] = (catchesByDate[date] || 0) + 1;
+  });
+
+  const sortedDates = Object.keys(catchesByDate).sort();
+  const catchCounts = sortedDates.map(date => catchesByDate[date]);
+
+  const ctx = document.getElementById("timeChart").getContext("2d");
+
+  if (timeChartInstance) timeChartInstance.destroy();
+
+  timeChartInstance = new Chart(ctx, {
+    type: "line",
+    data: {
+      labels: sortedDates,
+      datasets: [{
+        label: "Number of Fish Caught",
+        data: catchCounts,
+        fill: false,
+        borderColor: "rgba(75, 192, 192, 1)",
+        tension: 0.2,
+        pointBackgroundColor: "rgba(75, 192, 192, 1)"
+      }]
+    },
+    options: {
+      responsive: true,
+      scales: {
+        x: { title: { display: true, text: "Date" } },
+        y: { beginAtZero: true, title: { display: true, text: "Catches" }, ticks: { stepSize: 1 } }
+      }
+    }
+  });
+}
+
+
+// Load catches and charts on page load
+loadTimeChart();
+loadChart();
 loadCatches();

@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
@@ -8,6 +8,8 @@ import traceback
 import sys
 import matplotlib.pyplot as plt
 import numpy as np
+import io
+from typing import Dict
 
 # ---------------- Supabase Setup ----------------
 url = "https://fczfpqfwcxfhyakgggbf.supabase.co"
@@ -96,13 +98,5 @@ async def edit_catch(catch_id: int, catch: Catch):
 
         return {"success": True, "data": response.data}
 
-    except Exception as error:
-        raise HTTPException(status_code=500, detail=str(error))
-    
-
-@app.get("/display-chart")
-async def display_chart(species: str):
-    try:
-        responce = (supabase.table("catches").select("species").execute())
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
