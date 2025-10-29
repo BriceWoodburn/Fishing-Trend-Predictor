@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fishing Tracker - Charts</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header>
+    <h1>Fishing Insights</h1>
+    <nav>
+      <a href="index.html">🏠 Home</a>
+      <a href="charts.html" class="active">📊 Charts</a>
+    </nav>
+  </header>
+
+  <main>
+    <div class="chart-controls">
+      <label for="chartSelect">Select a Chart:</label>
+      <select id="chartSelect">
+        <option value="fishChart">Fish Species Frequency</option>
+        <option value="timeChart">Catches Over Time</option>
+        <option value="avgWeightChart">Average Weight per Species</option>
+        <option value="baitChart">Catches by Bait Type</option>
+        <option value="avgLengthChart">Average Length per Species</option>
+      </select>
+    </div>
+
+    <div class="chart-container">
+      <canvas id="chartCanvas"></canvas>
+    </div>
+  </main>
+
+  <script src="charts.js"></script>
+</body>
+</html>

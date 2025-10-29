@@ -1,0 +1,276 @@
+/* ===== GENERAL RESET ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: linear-gradient(to bottom right, #e0f7fa, #f1f8e9);
+  color: #333;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+/* ===== HEADER ===== */
+h1 {
+  color: #00695c;
+  font-size: 2.4rem;
+  margin-bottom: 20px;
+  text-align: center;
+  letter-spacing: 1px;
+}
+
+/* ===== FORM STYLING ===== */
+form#catchForm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  background: #ffffffcc;
+  padding: 20px;
+  border-radius: 12px;
+  max-width: 1000px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+form#catchForm input,
+form#catchForm button {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 0.95rem;
+}
+
+form#catchForm input:focus {
+  outline: none;
+  border-color: #00796b;
+  box-shadow: 0 0 4px rgba(0, 121, 107, 0.4);
+}
+
+form#catchForm button {
+  grid-column: span 2;
+  background-color: #00796b;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+form#catchForm button:hover {
+  background-color: #004d40;
+}
+
+/* ===== TABLE STYLING ===== */
+table {
+  width: 100%;
+  max-width: 1000px;
+  border-collapse: collapse;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+th, td {
+  padding: 12px 14px;
+  text-align: center;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+th {
+  background-color: #00796b;
+  color: white;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+button {
+  border: none;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+button:hover {
+  opacity: 0.85;
+}
+
+td button:first-child {
+  background-color: #0288d1;
+  color: white;
+  margin-right: 5px;
+}
+
+td button:last-child {
+  background-color: #d32f2f;
+  color: white;
+}
+
+/* ===== CHARTS SECTION ===== */
+h2, h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #004d40;
+}
+
+canvas {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 40px;
+}
+
+/* ===== MODAL ===== */
+#editModal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+#editModal div {
+  background: white;
+  padding: 25px;
+  border-radius: 12px;
+  width: 320px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.3s ease;
+}
+
+#editModal h3 {
+  margin-bottom: 15px;
+  color: #00796b;
+}
+
+#editModal label {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+#editModal input {
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 10px;
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#editModal button {
+  margin-top: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+#editModal button[type="submit"] {
+  background-color: #0288d1;
+  color: white;
+}
+
+#editModal button[type="button"] {
+  background-color: #ccc;
+  color: #333;
+  margin-left: 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ===== NAVIGATION BAR ===== */
+header {
+  width: 100%;
+  max-width: 1000px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 25px;
+}
+
+nav a {
+  text-decoration: none;
+  color: #00796b;
+  margin-left: 15px;
+  font-weight: 600;
+  transition: 0.2s;
+}
+
+nav a:hover {
+  color: #004d40;
+}
+
+nav a.active {
+  color: #004d40;
+  border-bottom: 2px solid #004d40;
+}
+
+/* ===== CHARTS PAGE ===== */
+.chart-controls {
+  background: white;
+  padding: 15px 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.chart-controls label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #004d40;
+}
+
+.chart-controls select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}
+
+.chart-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.chart-container canvas {
+  max-width: 800px;
+  width: 100%;
+}
+
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  form#catchForm {
+    grid-template-columns: 1fr;
+  }
+
+  table, canvas {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+}
