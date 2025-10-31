@@ -139,6 +139,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const sel = document.getElementById("chartSelect");
   if (sel) {
     sel.addEventListener("change", (e) => renderChart(e.target.value));
-    renderChart(sel.value || "fishChart"); // initial render
+    renderChart(sel.value || "fishChart");
   }
 });

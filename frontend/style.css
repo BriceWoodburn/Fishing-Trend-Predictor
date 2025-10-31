@@ -3,7 +3,7 @@
 html, body { height: 100%; }
 body {
   font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
-  background: linear-gradient(135deg,#e9f7f1 0%, #f6fbff 100%);
+  background: #e8f5f3;
   color: #21323a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -11,59 +11,65 @@ body {
 
 /* ===== HEADER / NAV ===== */
 .site-header {
-  width: 100%;
-  max-width: 1024px;
-  margin: 0 auto 20px auto;
-  padding: 14px 18px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 16px;
+  gap: 12px; /* space between items when wrapped */
+  padding: 14px 18px;
   background: rgba(255,255,255,0.9);
   border-radius: 12px;
   box-shadow: 0 6px 18px rgba(15,40,40,0.06);
+}
+
+.brand h1 {
+  font-size: 2rem;
+  margin: 0;
+  color: #0b6b63;
 }
 
 .header-wrap{
   padding: 16px;
 }
 
-.brand h1 {
-  color: #0b6b63;
-  font-size: 1.6rem;
-  letter-spacing: 0.6px;
-}
-.brand .tagline {
-  font-size: 0.85rem;
-  color: #55686a;
+.container-charts-main{
+  padding-top: 16px;
 }
 
 /* Navigation */
 .main-nav {
   display: flex;
-  align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
+
 .main-nav .nav-link {
-  display: inline-block;
-  padding: 8px 12px;
-  text-decoration: none;
-  color: #166d60;
+  background-color: #34495e;
+  color: white;
+  padding: 10px 18px;
   border-radius: 8px;
-  font-weight: 600;
-  transition: all .15s ease;
+  text-decoration: none;
+  font-weight: 500;
   border: 1px solid transparent;
+  transition: all 0.2s ease-in-out;
 }
+
 .main-nav .nav-link:hover {
-  background: rgba(22,109,96,0.07);
-  transform: translateY(-1px);
-  color: #064d45;
+  background-color: #0e8a7b;
+  transform: translateY(-2px);
 }
+
 .main-nav .nav-link.active {
-  background: linear-gradient(90deg,#e6fff9,#f0fff9);
-  color: #023c35;
-  border-color: rgba(2,60,53,0.08);
-  box-shadow: 0 3px 8px rgba(4,43,37,0.06);
+  background: linear-gradient(180deg,#0f8b78,#08715f);
+  border: none;
+  color: white;
+}
+
+/* Optional: subtle shadow for button depth */
+.main-nav .nav-link {
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.main-nav .nav-link:active {
+  transform: scale(0.97);
 }
 
 /* ===== FORM STYLING ===== */
@@ -73,7 +79,6 @@ body {
 .catch-form {
   width: 100%;
   max-width: 1024px;
-  margin: 0 auto 30px auto;
   display: grid;
   grid-template-columns: repeat(4, 1fr); /* 2x4 grid at desktop */
   gap: 12px;
@@ -112,6 +117,7 @@ body {
   border-radius: 12px;
   font-weight: 700;
   cursor: pointer;
+  width: 60%;
   box-shadow: 0 6px 16px rgba(8,113,95,0.18);
   transition: transform .12s ease, box-shadow .12s ease;
 }
@@ -157,63 +163,97 @@ body {
   color: #133233;
 }
 .catches-table thead th {
-  background: linear-gradient(90deg,#057b6f,#0b6b63);
+  background: #0b6b63;
   color: white;
   font-weight: 700;
   position: sticky;
   top: 0;
 }
+.catches-table td:last-child {
+  display: flex; 
+  flex-direction: column;         
+  justify-content: center; 
+  gap: 6px;                
+  align-items: center; 
+}
 .catches-table tr:nth-child(even) { background: #fbfdfc; }
 
-/* Action buttons */
+/* Edit button */
 .catches-table td button.edit { 
-  background: #0288d1; 
+  background: linear-gradient(180deg, #12a18a, #0f8b78); 
   color: white; 
-  margin-right: 6px; 
   border: none; 
   border-radius: 8px;
-  padding: 6px 8px;
+  padding: 6px 10px;
   cursor: pointer;
   transition: all 0.15s ease;
+  width: 80px;
+  text-align: center;
 }
-.catches-table td button.edit:hover { background: #0277bd; transform: translateY(-1px); }
+.catches-table td button.edit:hover { 
+  background: linear-gradient(180deg, #0f8b78, #08715f); 
+  transform: translateY(-1px); 
+}
 
+/* Delete button */
 .catches-table td button.delete { 
-  background: #d32f2f; 
+  background: linear-gradient(180deg, #c94f4f, #b53f3f); 
   color: white; 
   border: none; 
   border-radius: 8px;
-  padding: 6px 8px;
+  padding: 6px 10px;
   cursor: pointer;
   transition: all 0.15s ease;
+  width: 80px; /* same width as edit */
+  text-align: center;
 }
-.catches-table td button.delete:hover { background: #c62828; transform: translateY(-1px); }
+.catches-table td button.delete:hover { 
+  background: linear-gradient(180deg, #b53f3f, #a03232); /* darker on hover */
+  transform: translateY(-1px); 
+}
 
 /* ===== MODAL ===== */
 .modal {
   position: fixed;
   inset: 0;
   background: rgba(0,0,0,0.45);
-  display: none; /* default hidden */
-  align-items: center;
-  justify-content: center;
   z-index: 1100;
+
+  display: none;            /* hidden by default */
+  /* top-anchored flex layout so box sits at top area and won't center/scale */
+  display: flex;
+  align-items: flex-start;  /* anchor to top instead of center */
+  justify-content: center;
+  overflow: auto;           /* allow page to scroll if needed */
+  padding: 24px 12px;       /* space around modal box (so box doesn't touch edges) */
 }
 
+/* show modal when aria-hidden is false */
 .modal[aria-hidden="true"] {
-  display: none; /* hidden */
+  display: none;
 }
 
-.modal[aria-hidden="false"] {
-  display: flex; /* show when opened */
-}
+/* modal content: fixed box that DOES NOT shrink, but scrolls internally */
 .modal-content {
-  background: white;
-  padding: 22px;
-  border-radius: 12px;
+  background: #fff;
   width: 360px;
+  max-width: 96%;
+  margin-top: 16px;                /* top offset from viewport */
+  border-radius: 12px;
+  padding: 22px;
   box-shadow: 0 12px 28px rgba(3,20,20,0.18);
+
+  /* Important: don't let the box shrink, and keep intrinsic sizing */
+  flex: 0 0 auto;                  /* prevent flex shrinking/growing */
+
+  /* Constrain height to viewport and make content scroll inside the box */
+  max-height: calc(100vh - 48px);  /* leave some space above/below */
+  overflow-y: auto;                /* internal scroll when content > max-height */
 }
+
+/* optional: a small visual nicety for the inner scrollbar */
+.modal-content::-webkit-scrollbar { width: 8px; }
+.modal-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 6px; }
 .modal-content h3 { color: #0b6b63; margin-bottom: 12px; }
 .modal-content label {
   display:block;
@@ -256,7 +296,7 @@ body {
 .chart-controls {
   width: 100%;
   max-width: 1024px;
-  margin: 0 auto 14px auto;
+  margin: 12px auto 14px auto;
   background: white;
   padding: 12px;
   border-radius: 12px;
@@ -290,12 +330,12 @@ body {
 }
 .page-wrap {
   max-width: 1024px;
-  margin: 0 auto;          /* center page horizontally */
+  margin: 0 auto;
   padding: 0 16px;
 }
 
 .page-wrap h2 {
-  text-align: center;      /* center the header text */
+  text-align: center;
   margin-bottom: 16px;
   color: #0b6b63;
   font-size: 1.3rem;
@@ -312,17 +352,25 @@ h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .catch-form {
-    /* 2 columns instead of stacking all */
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Slightly shrink nav buttons on medium screens */
+  .main-nav .nav-link {
+    padding: 7px 12px;
+    font-size: 0.95rem;
+  }
+
+  .form-actions .primary-btn {
+    width: 60%; /* or any percentage you want */
   }
 }
 
 @media (max-width: 640px) {
   .site-header { padding: 12px; }
-  .brand h1 { font-size: 1.2rem; }
   .catch-form { grid-template-columns: 1fr; padding: 14px; }
   .form-actions { margin-top: 8px; }
   .primary-btn { width: 100%; padding: 12px; }
-  .catches-table { min-width: 700px; font-size: 0.88rem; }
   #chartCanvas { height: 360px; }
+  .brand h1 { font-size: 1.6rem; }
 }
