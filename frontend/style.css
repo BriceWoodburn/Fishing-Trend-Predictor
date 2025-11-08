@@ -141,7 +141,7 @@ body {
 .table-wrap {
   width: 100%;
   max-width: 1024px;
-  margin: 0 auto 40px auto;
+  margin: 0 auto;
   overflow-x: auto;
   background: white;
   padding: 12px;
@@ -270,8 +270,30 @@ body {
   border:1px solid #e6efee; 
 }
 
-/* Modal buttons row */
-.modal-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:6px; }
+/* Make modal buttons uniform in size */
+.modal-actions .primary-btn,
+.modal-actions .muted-btn {
+  flex: 1;                /* make both buttons take equal space */
+  min-width: 100px;       /* optional: ensures buttons don’t shrink too small */
+  text-align: center;     /* center text inside the buttons */
+}
+
+/* Optional: add a gap between buttons if not already there */
+.modal-actions {
+  display: flex;
+  gap: 12px;              /* keeps some space between the buttons */
+}
+
+.modal-actions .muted-btn {
+  background: #70a7a3;
+  color: white;
+  border: none;
+}
+.modal-actions .muted-btn:hover {
+  background: linear-gradient(180deg,#0f8b78,#08715f);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(8,113,95,0.18);
+}
 
 /* ===== CHARTS ===== */
 .chart-container {
@@ -457,6 +479,120 @@ body {
   flex-wrap: nowrap;
 }
 
+/* ===== CATCHES HEADER (Title + Search Bar) ===== */
+.catches-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 0px 18px;
+}
+
+.catches-header h2 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0b6b63;
+}
+
+/* Search bar styling */
+.search-bar {
+  display: flex;
+  align-items: center;
+}
+
+.search-bar input {
+  padding: 8px 14px;
+  border: 1px solid #dce7e6;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  color: #21323a;
+  background: #ffffff;
+  box-shadow: 0 3px 8px rgba(8, 43, 40, 0.04);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  width: 220px;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #0f8b78;
+  border-width: 2px;
+}
+
+/* ===== PAGINATION CONTROLS ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin-top: 18px;
+  font-weight: 600;
+}
+
+.pagination button {
+  background: linear-gradient(180deg, #0f8b78, #08715f);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 8px 16px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(8, 113, 95, 0.18);
+  transition: background 0.2s ease, transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+/* Hover and focus */
+.pagination button:hover:not(:disabled),
+.pagination button:focus:not(:disabled) {
+  background: linear-gradient(180deg, #0e7e6d, #076957);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(8, 113, 95, 0.25);
+  outline: none;
+}
+
+/* Disabled state */
+.pagination button:disabled {
+  background: #70a7a3;
+  color: white;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Page info (center text between buttons) */
+#pageInfo {
+  color: #0b6b63;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+/* ===== INPUT FIELD STYLING ===== */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+input[type="time"],
+select,
+textarea {
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 8px 10px;
+  font-size: 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Focus effect — matches your green accent */
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: #0f8b78;
+  border-width: 2px;
+}
+
 /* ===== TYPOS & HEADINGS ===== */
 h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
 
@@ -491,5 +627,19 @@ h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
 
   .chart-dropdown {
     display: block;
+  }
+
+  .catches-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 12px;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .search-bar input {
+    width: 100%;
   }
 }
