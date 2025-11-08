@@ -30,19 +30,14 @@ app.add_middleware(
 
 # ---------------- Pydantic Model ----------------
 class Catch(BaseModel):
-    date: Optional[str] = None
-    time: Optional[str] = None
+    date: str
+    time: str
     location: str
     species: str
     length_in: float
     weight_lbs: float
-    weather: Optional[str] = None
-    bait: str = None
-
-# ---------------- Routes ----------------
-@app.get("/")
-def root():
-    return {"message": "Backend is running!"}
+    temperature: float
+    bait: str
 
 @app.post("/log-catch")
 def log_catch(catch: Catch):

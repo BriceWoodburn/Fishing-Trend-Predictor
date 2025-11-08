@@ -42,7 +42,7 @@ body {
 }
 
 .main-nav .nav-link {
-  background-color: #34495e;
+  background-color: #70a7a3;
   color: white;
   padding: 10px 18px;
   border-radius: 8px;
@@ -303,31 +303,53 @@ body {
   display:flex;
   align-items:center;
   gap:12px;
-  justify-content:center;
+  justify-content:flex-start;
   box-shadow: 0 6px 18px rgba(8,43,40,0.04);
 }
 
-.select-wrapper {
-  position: relative;
-  display:inline-flex;
-  align-items:center;
+.chart-controls label {
+  margin-right: 8px; /* extra space before dropdown */
+  min-width: 140px;   /* reserve enough space so it doesn't wrap */
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  color: #0b6b63;
+  white-space: nowrap; /* prevent stacking on small widths */
 }
-.select-wrapper select {
-  -webkit-appearance:none;
-  -moz-appearance:none;
-  appearance:none;
-  padding: 10px 36px 10px 12px;
+
+/* Style the chart select to look like buttons */
+.select-wrapper select#chartSelect {
+  width: 100%;
+  padding: 10px 0;              /* match button padding */
   border-radius: 10px;
-  border:1px solid #dfeeea;
-  background: white;
-  font-weight:600;
+  border: none;
+  background: #70a7a3;          /* inactive button color */
+  color: White;               /* dark text like buttons */
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  text-align: center;           /* center text like buttons */
+  transition: background 0.2s ease, color 0.15s ease, box-shadow 0.15s ease;
 }
+
+.select-wrapper select#chartSelect {
+  background-color: #70a7a3; /* default light green */
+  color: white;
+}
+
+.select-wrapper select#chartSelect:hover,
+.select-wrapper select#chartSelect:focus {
+  background-color: #0f8b78; /* dark green */
+  color: white;
+}
+
+/* Hide the SVG arrow completely (you don’t want it) */
 .select-wrapper .select-arrow {
-  position: absolute;
-  right: 8px;
-  pointer-events: none;
-  color: #3a6b63;
+  display: none;
 }
+
 .page-wrap {
   max-width: 1024px;
   margin: 0 auto;
@@ -345,6 +367,95 @@ body {
   padding: 16px 0;
 }
 
+
+/* Chart control group */
+.chart-control-group {
+  display: flex;
+  gap: 12px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.chart-controls label {
+  font-weight: 700;   /* makes text thicker (bold) */
+}
+
+/* Default: show buttons, hide select */
+.select-wrapper { display: none; }
+.chart-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 12px;
+  width: 100%;
+  max-width: 900px;
+}
+
+/* Buttons share space equally and shrink when needed */
+.chart-buttons button {
+  flex: 1 1 0;
+  min-width: 80px;
+  padding: 10px 0;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  background: #70a7a3;              /* neutral gray background */
+  color: white;                   /* dark text */
+  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+}
+
+/* Hover effect — subtle lift */
+.chart-buttons button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+}
+
+/* Active (selected) button — green color */
+.chart-buttons button.active {
+  background: linear-gradient(180deg, #0f8b78, #08715f);
+  color: white;
+  transform: none; /* stays flat when active */
+}
+
+.chart-dropdown {
+  display: none; /* stays hidden until needed */
+  position: relative;
+}
+
+.chart-dropdown select {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #f2f4f3;               /* light neutral background */
+  color: #21323a;                    /* dark text for contrast */
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;               
+  background-image: linear-gradient(180deg, #70a7a3, #5fb0b7); /* teal theme */
+  background-size: 100% 300%;
+  background-position: top;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  transition: background-position 0.2s ease, box-shadow 0.15s ease;
+}
+
+/* Hover and focus states — slight lift and brighter teal */
+.chart-dropdown select:hover,
+.chart-dropdown select:focus {
+  background-position: bottom;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+  outline: none;
+}
+
+/* Optional: keep them centered when space allows */
+.chart-control-group {
+  flex-wrap: nowrap;
+}
 
 /* ===== TYPOS & HEADINGS ===== */
 h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
@@ -373,4 +484,12 @@ h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
   .primary-btn { width: 100%; padding: 12px; }
   #chartCanvas { height: 360px; }
   .brand h1 { font-size: 1.6rem; }
+  .select-wrapper { display: inline-flex; }
+  .chart-buttons {
+    display: none;
+  }
+
+  .chart-dropdown {
+    display: block;
+  }
 }

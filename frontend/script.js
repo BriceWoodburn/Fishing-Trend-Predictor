@@ -53,7 +53,7 @@ async function loadCatches() {
         <td>${escapeHtml(c.species)}</td>
         <td>${c.length_in ?? ''}</td>
         <td>${c.weight_lbs ?? ''}</td>
-        <td>${escapeHtml(c.weather || "")}</td>
+        <td>${c.temperature ?? ''}</td>
         <td>${escapeHtml(c.bait || "")}</td>
         <td>
           <button class="edit" onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
@@ -104,7 +104,7 @@ function openEditForm(c) {
   document.getElementById("editSpecies").value = c.species || "";
   document.getElementById("editLength").value = c.length_in || "";
   document.getElementById("editWeight").value = c.weight_lbs || "";
-  document.getElementById("editWeather").value = c.weather || "";
+  document.getElementById("editTemperature").value = c.temperature || "";
   document.getElementById("editBait").value = c.bait || "";
 }
 
@@ -126,7 +126,7 @@ if (document.getElementById("editForm")) {
       species: document.getElementById("editSpecies").value,
       length_in: parseFloat(document.getElementById("editLength").value),
       weight_lbs: parseFloat(document.getElementById("editWeight").value),
-      weather: document.getElementById("editWeather").value,
+      temperature: document.getElementById("editTemperature").value,
       bait: document.getElementById("editBait").value,
     };
 

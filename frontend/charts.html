@@ -11,7 +11,7 @@
   <div class="page-wrap">
     <header class="site-header">
       <div class="brand">
-        <h1>Fishing Insights</h1>
+        <h1>Fishing Tracker</h1>
       </div>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html" class="nav-link">Home</a>
@@ -21,16 +21,26 @@
 
     <main class="container charts-main">
       <section class="chart-controls">
-        <label for="chartSelect">Select a chart</label>
-        <div class="select-wrapper">
-          <select id="chartSelect" aria-label="Choose chart">
-            <option value="fishChart">Fish Species Frequency</option>
-            <option value="timeChart">Catches Over Time</option>
-            <option value="avgWeightChart">Average Weight per Species</option>
-            <option value="baitChart">Catches by Bait Type</option>
-            <option value="avgLengthChart">Average Length per Species</option>
-          </select>
-          <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z" fill="currentColor"/></svg>
+        <div class="chart-control-group">
+          <div class="select-wrapper">
+            <label for="chartSelect" class="visually-hidden">Chart Displayed: </label>
+            <select id="chartSelect" aria-label="Choose chart">
+              <option value="fishChart">Species Caught</option>
+              <option value="timeChart">Catches Over Time</option>
+              <option value="baitChart">Catches By Type</option>
+              <option value="avgWeightChart">Average Weight</option>
+              <option value="avgLengthChart">Average Length</option>
+            </select>
+            <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z" fill="currentColor"/></svg>
+          </div>
+
+          <div class="chart-buttons" role="tablist" aria-label="Chart types">
+            <button role="tab" data-chart="fishChart">Species Caught</button>
+            <button role="tab" data-chart="timeChart">Catches Over Time</button>
+            <button role="tab" data-chart="baitChart">Catches By Bait</button>
+            <button role="tab" data-chart="avgWeightChart">Average Weight</button>
+            <button role="tab" data-chart="avgLengthChart">Average Length</button>
+          </div>
         </div>
       </section>
 

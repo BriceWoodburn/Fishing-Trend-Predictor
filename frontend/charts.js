@@ -142,3 +142,36 @@ document.addEventListener("DOMContentLoaded", () => {
     renderChart(sel.value || "fishChart");
   }
 });
+
+// Ensure DOM loaded before querying controls
+document.addEventListener("DOMContentLoaded", () => {
+  const chartSelect = document.getElementById("chartSelect");
+  const chartButtons = Array.from(document.querySelectorAll(".chart-buttons button"));
+
+  if (!chartSelect) return; // safety
+
+  // Sync: when select changes, update active button and call change handler
+  chartSelect.addEventListener("change", (e) => {
+    const val = e.target.value;
+    chartButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.chart === val));
+    // Call your existing chart update function here if it expects a string
+    // Example: updateChart(val);
+    if (typeof updateChart === "function") updateChart(val);
+  });
+
+  // When a button is clicked, set select value and dispatch change event
+  chartButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      chartSelect.value = btn.dataset.chart;
+      // Trigger same behavior as select change
+      const ev = new Event("change", { bubbles: true });
+      chartSelect.dispatchEvent(ev);
+    });
+  });
+
+  // Initialize active button to match current select default
+  const initial = chartSelect.value;
+  chartButtons.forEach(btn => btn.classList.toggle("active", btn.dataset.chart === initial));
+});
+
+
