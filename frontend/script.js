@@ -1,4 +1,8 @@
 const backendUrl = "http://127.0.0.1:8000";
+let allCatches = [];
+let filteredCatches = [];
+let currentPage = 1;
+const itemsPerPage = 25;
 
 /* -------------------- Home Page: Catches -------------------- */
 if (document.getElementById("catchForm")) {
@@ -36,41 +40,112 @@ if (document.getElementById("catchForm")) {
 }
 
 // Load catches and populate table
-async function loadCatches() {
+async function loadCatches(keepPage = false) {
   try {
     const res = await fetch(`${backendUrl}/catches`);
     const json = await res.json();
-    const tbody = document.querySelector("#catchesTable tbody");
-    tbody.innerHTML = "";
+    allCatches = json.data || [];
 
-    (json.data || []).forEach(c => {
-      const tr = document.createElement("tr");
+    // Initially, filteredCatches = allCatches
+    filteredCatches = [...allCatches];
 
-      tr.innerHTML = `
-        <td>${c.date}</td>
-        <td>${c.time}</td>
-        <td>${escapeHtml(c.location)}</td>
-        <td>${escapeHtml(c.species)}</td>
-        <td>${c.length_in ?? ''}</td>
-        <td>${c.weight_lbs ?? ''}</td>
-        <td>${c.temperature ?? ''}</td>
-        <td>${escapeHtml(c.bait || "")}</td>
-        <td>
-          <button class="edit" onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
-          <button class="delete" onclick='deleteCatch(${c.id})'>Delete</button>
-        </td>
-      `;
-      tbody.appendChild(tr);
-    });
-
-    // If charts page also loaded in same SPA, optionally reload charts
-    if (typeof loadAllCharts === "function") {
-      try { await loadAllCharts(); } catch (e) { /* ignore if not present */ }
-    }
+    const pageToShow = keepPage ? currentPage : 1;
+    renderTablePage(pageToShow);
   } catch (err) {
     console.error("Failed to load catches:", err);
   }
 }
+
+const searchInput = document.getElementById("catchSearch");
+searchInput?.addEventListener("input", () => {
+  const keyword = searchInput.value.toLowerCase().trim();
+
+  filteredCatches = allCatches.filter(c => {
+  const formattedDate = c.date ? formatDate(c.date) : "";
+  const formattedTime = c.time ? formatTime(c.time) : "";
+
+  return (
+    formattedDate.toLowerCase().includes(keyword) ||
+    formattedTime.toLowerCase().includes(keyword) ||
+    Object.entries(c).some(([key, val]) => {
+      // skip date and time since already checked
+      if (key === "date" || key === "time") return false;
+      return val !== null && val !== undefined && String(val).toLowerCase().includes(keyword);
+    })
+  );
+  });
+
+  // Reset to page 1 whenever a search is performed
+  renderTablePage(1);
+});
+
+function renderTablePage(page) {
+  currentPage = page;
+  const tbody = document.querySelector("#catchesTable tbody");
+  tbody.innerHTML = "";
+
+  const start = (page - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+const pageData = filteredCatches.slice(start, end);
+
+  pageData.forEach(c => {
+    const tr = document.createElement("tr");
+
+    // Format date and time for display
+    const formattedDate = c.date ? formatDate(c.date) : "";
+    const formattedTime = c.time ? formatTime(c.time) : "";
+
+    tr.innerHTML = `
+      <td>${formattedDate}</td>
+      <td>${formattedTime}</td>
+      <td>${escapeHtml(c.location)}</td>
+      <td>${escapeHtml(c.species)}</td>
+      <td>${c.length_in ?? ''}</td>
+      <td>${c.weight_lbs ?? ''}</td>
+      <td>${c.temperature ?? ''}</td>
+      <td>${escapeHtml(c.bait || "")}</td>
+      <td>
+        <button class="edit" onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
+        <button class="delete" onclick='deleteCatch(${c.id})'>Delete</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  updatePaginationControls();
+}
+
+function updatePaginationControls() {
+  const totalPages = Math.ceil(filteredCatches.length / itemsPerPage);
+  document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
+
+  document.getElementById("prevPage").disabled = currentPage === 1;
+  document.getElementById("nextPage").disabled = currentPage === totalPages;
+}
+
+// Scroll smoothly to top of table section
+function scrollToTableTop() {
+  const tableSection = document.querySelector(".catches-wrap");
+  if (tableSection) {
+    tableSection.scrollIntoView({ behavior: "smooth" });
+  }
+}
+
+// Page navigation
+document.getElementById("prevPage")?.addEventListener("click", () => {
+  if (currentPage > 1) {
+    renderTablePage(currentPage - 1);
+    scrollToTableTop();
+  }
+});
+
+document.getElementById("nextPage")?.addEventListener("click", () => {
+  const totalPages = Math.ceil(allCatches.length / itemsPerPage);
+  if (currentPage < totalPages) {
+    renderTablePage(currentPage + 1);
+    scrollToTableTop();
+  }
+});
 
 function escapeHtml(text = "") {
   return String(text).replace(/[&<>"']/g, function (m) {
@@ -84,7 +159,7 @@ async function deleteCatch(id) {
   try {
     const res = await fetch(`${backendUrl}/delete-catch/${id}`, { method: "DELETE" });
     const result = await res.json();
-    if (result.success) loadCatches();
+    if (result.success) loadCatches(true);
     else alert("❌ Error deleting catch: " + (result.message || "Unknown error"));
   } catch (err) {
     alert("❌ Network or server error: " + err.message);
@@ -97,9 +172,16 @@ function openEditForm(c) {
   modal.setAttribute("aria-hidden", "false");
   modal.style.display = "flex";
 
+  // Clean up time to be HH:MM only
+  let cleanTime = c.time || "";
+  if (cleanTime.includes(":")) {
+    // If time has seconds (HH:MM:SS), trim to HH:MM
+    cleanTime = cleanTime.split(":").slice(0, 2).join(":");
+  }
+
   document.getElementById("editId").value = c.id;
   document.getElementById("editDate").value = c.date || "";
-  document.getElementById("editTime").value = c.time || "";
+  document.getElementById("editTime").value = cleanTime;
   document.getElementById("editLocation").value = c.location || "";
   document.getElementById("editSpecies").value = c.species || "";
   document.getElementById("editLength").value = c.length_in || "";
@@ -139,7 +221,7 @@ if (document.getElementById("editForm")) {
 
       if (res.ok) {
         closeEditForm();
-        loadCatches();
+        loadCatches(true);
       } else {
         console.error("Failed to update catch");
       }
@@ -153,3 +235,26 @@ if (document.getElementById("editForm")) {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeEditForm();
 });
+
+function formatDate(isoDate) {
+  const date = new Date(isoDate);
+  return date.toLocaleDateString("en-US", {
+    month: "2-digit",
+    day: "2-digit",
+    year: "numeric",
+  });
+}
+
+// Utility: format time as HH:MM AM/PM
+function formatTime(timeString) {
+  // Create a temporary Date object with today's date + given time
+  const [hour, minute] = timeString.split(":");
+  const date = new Date();
+  date.setHours(hour, minute);
+
+  return date.toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
+}

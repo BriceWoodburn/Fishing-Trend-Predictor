@@ -46,8 +46,7 @@ def log_catch(catch: Catch):
         if not catch.date:
             catch.date = datetime.today().date().isoformat()
         if not catch.time:
-            catch.time = datetime.now().time().isoformat(timespec="seconds")
-
+            catch.time = datetime.now().strftime("%H:%M")
         # Insert into Supabase
         response = supabase.table("catches").insert([catch.dict()]).execute()
         return {"success": True, "data": response.data}

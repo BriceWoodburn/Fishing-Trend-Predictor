@@ -40,6 +40,9 @@
       </section>
       <div class="catches-wrap">
         <h2>All Catches</h2>
+        <div class="search-bar">
+        <input type="text" id="catchSearch" placeholder="Search catches..." aria-label="Search catches" />
+      </div>
         <div class="table-wrap">
           <table id="catchesTable" class="catches-table">
             <thead>
@@ -57,6 +60,11 @@
             </thead>
             <tbody></tbody>
           </table>
+        </div>
+        <div id="paginationControls" class="pagination">
+          <button id="prevPage" disabled>Previous</button>
+          <span id="pageInfo"></span>
+          <button id="nextPage">Next</button>
         </div>
       </div>
     </main>
