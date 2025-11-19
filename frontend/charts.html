@@ -2,16 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fishing Tracker - Charts</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CastIQ - Charts</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
   <div class="page-wrap">
-    <header class="site-header">
+    <!-- Header -->
+    <header class="site-header" role="banner">
       <div class="brand">
-        <h1>Fishing Tracker</h1>
+        <h1>CastIQ</h1>
       </div>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html" class="nav-link">Home</a>
@@ -19,37 +20,49 @@
       </nav>
     </header>
 
-    <main class="container charts-main">
-      <section class="chart-controls">
+
+    <!-- Main Chart Section -->
+    <main class="container charts-main" role="main">
+      <!-- Chart Controls -->
+      <section class="chart-controls" aria-label="Chart selection">
         <div class="chart-control-group">
+          <!-- Dropdown for mobile -->
           <div class="select-wrapper">
-            <label for="chartSelect" class="visually-hidden">Chart Displayed: </label>
+            <label for="chartSelect" class="visually-hidden">Select chart</label>
             <select id="chartSelect" aria-label="Choose chart">
-              <option value="fishChart">Species Caught</option>
-              <option value="timeChart">Catches Over Time</option>
-              <option value="baitChart">Catches By Type</option>
-              <option value="avgWeightChart">Average Weight</option>
-              <option value="avgLengthChart">Average Length</option>
+              <option value="speciesCountChart">Species Caught</option>
+              <option value="catchesOverTimeChart">Catches Over Time</option>
+              <option value="baitUsageChart">Catches By Bait</option>
+              <option value="averageWeightChart">Average Weight</option>
+              <option value="averageLengthChart">Average Length</option>
             </select>
-            <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 10l5 5 5-5z" fill="currentColor"/></svg>
+            <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M7 10l5 5 5-5z" fill="currentColor"/>
+            </svg>
           </div>
 
-          <div class="chart-buttons" role="tablist" aria-label="Chart types">
-            <button role="tab" data-chart="fishChart">Species Caught</button>
-            <button role="tab" data-chart="timeChart">Catches Over Time</button>
-            <button role="tab" data-chart="baitChart">Catches By Bait</button>
-            <button role="tab" data-chart="avgWeightChart">Average Weight</button>
-            <button role="tab" data-chart="avgLengthChart">Average Length</button>
+
+          <!-- Buttons for desktop -->
+          <div class="chart-buttons">
+            <button data-chart="speciesCountChart">Species Caught</button>
+            <button data-chart="catchesOverTimeChart">Catches Over Time</button>
+            <button data-chart="baitUsageChart">Catches By Bait</button>
+            <button data-chart="averageWeightChart">Average Weight</button>
+            <button data-chart="averageLengthChart">Average Length</button>
           </div>
         </div>
       </section>
 
+
+      <!-- Chart Canvas -->
       <section class="chart-wrapper">
-        <canvas id="chartCanvas"></canvas>
+        <canvas id="chartCanvas" aria-label="Fishing data chart"></canvas>
       </section>
     </main>
   </div>
 
+
   <script src="charts.js"></script>
 </body>
 </html>
+

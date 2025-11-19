@@ -1,32 +1,31 @@
-from fastapi import FastAPI, HTTPException, Response
+from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
 from datetime import datetime
-from typing import Optional
 import traceback
 import sys
-import matplotlib.pyplot as plt
-import numpy as np
-import io
-from typing import Dict
+
 
 # ---------------- Supabase Setup ----------------
-url = "https://fczfpqfwcxfhyakgggbf.supabase.co"
-key = "sb_secret_7X0ghBjHEJeyBBeSN_yFRQ_CIgwBtvu"
-supabase: Client = create_client(url, key)
+SUPABASE_URL = "https://fczfpqfwcxfhyakgggbf.supabase.co"
+SUPABASE_KEY = "sb_secret_7X0ghBjHEJeyBBeSN_yFRQ_CIgwBtvu"
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
 
 # ---------------- FastAPI Setup ----------------
 app = FastAPI()
 
+
 # Allow frontend to communicate with backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # replace "*" with your frontend URL for production
+    allow_origins=["*"],  # Replace "*" with your frontend URL in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 # ---------------- Pydantic Model ----------------
 class Catch(BaseModel):
@@ -39,58 +38,95 @@ class Catch(BaseModel):
     temperature: float
     bait: str
 
+
+
+
+# ---------------- API Endpoints ----------------
 @app.post("/log-catch")
-def log_catch(catch: Catch):
+def logCatch(catch: Catch):
+    """
+    Logs a new catch to the Supabase database.
+    If date or time is missing, defaults to current date and time.
+    """
     try:
-        # Set default date/time if missing
+        # Set defaults if missing
         if not catch.date:
             catch.date = datetime.today().date().isoformat()
         if not catch.time:
             catch.time = datetime.now().strftime("%H:%M")
-        # Insert into Supabase
+
+
+        # Insert catch into Supabase
         response = supabase.table("catches").insert([catch.dict()]).execute()
         return {"success": True, "data": response.data}
+
 
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
+
+
+
 @app.get("/catches")
-def get_catches():
+def getCatches():
+    """
+    Retrieves all catches from the Supabase database, ordered by ID ascending.
+    """
     try:
         response = supabase.table("catches").select("*").order("id", desc=False).execute()
         return {"data": response.data}
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
-    
-@app.delete("/delete-catch/{catch_id}")
-def delete_catch(catch_id: int):
-    try:
-        response = supabase.table("catches").delete().eq("id", catch_id).execute()
 
-        if not response.data or len(response.data) == 0:
+
+
+
+@app.delete("/delete-catch/{catchId}")
+def deleteCatch(catchId: int):
+    """
+    Deletes a catch from the database by its ID.
+    Returns success status and message.
+    """
+    try:
+        response = supabase.table("catches").delete().eq("id", catchId).execute()
+
+
+        if not response.data:
+            # No data returned means catch was not found
             return {"success": False, "message": "Catch not found"}
+
 
         return {"success": True, "message": "Catch deleted successfully"}
 
-    except Exception as e:
-        # Log full traceback to the backend console
-        print("ERROR in delete_catch:", e, file=sys.stderr)
-        traceback.print_exc()
 
-        # Still send useful info to the frontend
-        raise HTTPException(status_code=500, detail=f"Delete failed: {str(e)}")
-    
-@app.put("/edit-catch/{catch_id}")
-async def edit_catch(catch_id: int, catch: Catch):
+    except Exception as error:
+        # Log detailed traceback to backend console
+        print("ERROR in deleteCatch:", error, file=sys.stderr)
+        traceback.print_exc()
+        # Send a simpler error message to frontend
+        raise HTTPException(status_code=500, detail=f"Delete failed: {str(error)}")
+
+
+
+
+@app.put("/edit-catch/{catchId}")
+async def editCatch(catchId: int, catch: Catch):
+    """
+    Updates an existing catch by its ID.
+    Does not allow updating the ID field itself.
+    """
     try:
         response = (
             supabase.table("catches")
-            .update(catch.dict(exclude={"id"}))  # don’t allow id updates
-            .eq("id", catch_id)
+            .update(catch.dict(exclude={"id"}))  # Prevent updating the ID
+            .eq("id", catchId)
             .execute()
         )
 
+
         return {"success": True, "data": response.data}
+
 
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
+

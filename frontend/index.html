@@ -2,99 +2,121 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Fishing Tracker</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CastIQ - Fishing Tracker</title>
   <link rel="stylesheet" href="style.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-  <div class = page-wrap>
-    <header class="site-header">
+  <!-- Page Wrapper -->
+  <div class="page-wrap">
+    <!-- Header -->
+    <header class="site-header" role="banner">
       <div class="brand">
-        <h1>Fishing Tracker</h1>
+        <h1>CastIQ</h1>
       </div>
       <nav class="main-nav" aria-label="Main navigation">
         <a href="index.html" class="nav-link active">Home</a>
         <a href="charts.html" class="nav-link">Charts</a>
       </nav>
     </header>
-  </section>
 
-    <main class="container">
-      <section class="log-section">
-        <form id="catchForm" class="catch-form" autocomplete="off">
-          <input type="date" name="date" aria-label="Date" />
-          <input type="time" name="time" aria-label="Time" />
+
+    <!-- Main Content -->
+    <main class="container" role="main">
+      <!-- Log Catch Form -->
+      <section class="log-section" aria-labelledby="logCatchTitle">
+        <h2 id="logCatchTitle">Log a New Catch</h2>
+        <form id="catchForm" class="catch-form" autocomplete="off" aria-label="Log new catch form">
+          <input type="date" name="date" aria-label="Date of catch" />
+          <input type="time" name="time" aria-label="Time of catch" />
           <input type="text" name="location" placeholder="Location" required aria-label="Location" />
           <input type="text" name="species" placeholder="Species" required aria-label="Species" />
           <input type="number" step="0.01" name="length_in" placeholder="Length (inches)" required aria-label="Length in inches" />
           <input type="number" step="0.01" name="weight_lbs" placeholder="Weight (lbs)" required aria-label="Weight in pounds" />
-          <input type="number" step="0.01" name="temperature" placeholder="Water Temp (&deg;F)" required aria-label="Temperature" />
-          <input type="text" name="bait" placeholder="Bait" required aria-label="Bait" />
+          <input type="number" step="0.01" name="temperature" placeholder="Water Temp (°F)" required aria-label="Water Temperature in Fahrenheit" />
+          <input type="text" name="bait" placeholder="Bait" required aria-label="Bait used" />
 
-          <!-- Form actions moved to its own row so button can be centered -->
+
+          <!-- Submit Button -->
           <div class="form-actions">
             <button type="submit" class="primary-btn">Log Catch</button>
           </div>
         </form>
       </section>
-      <div class="catches-wrap">
-  <div class="catches-header">
-    <h2>All Catches</h2>
-    <div class="search-bar">
-      <input type="text" id="catchSearch" placeholder="Search" aria-label="Search catches" />
-    </div>
+
+
+      <!-- Catches Table & Pagination -->
+      <section class="catches-wrap" aria-labelledby="allCatchesTitle">
+        <h2 id="allCatchesTitle">All Catches</h2>
+        <!-- Search Bar -->
+        <div class="search-bar">
+          <label for="catchSearch" class="visually-hidden">Search catches</label>
+          <input type="text" id="catchSearch" placeholder="Search" aria-label="Search catches" />
+        </div>
+
+
+        <!-- Table -->
+        <div class="table-wrap">
+          <table id="catchesTable" class="catches-table">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Location</th>
+                <th>Species</th>
+                <th>Length (in)</th>
+                <th>Weight (lbs)</th>
+                <th>Water Temp (°F)</th>
+                <th>Bait</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+
+
+        <!-- Pagination Controls -->
+        <div id="paginationControls" class="pagination" aria-label="Pagination controls">
+          <button id="prevPage" disabled>Previous</button>
+          <span id="pageInfo"></span>
+          <button id="nextPage">Next</button>
+        </div>
+      </section>
+
+
+      <!-- Edit Catch Modal -->
+      <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="editCatchTitle">
+        <div class="modal-content">
+          <h3 id="editCatchTitle">Edit Catch</h3>
+          <form id="editForm" class="edit-form" aria-label="Edit catch form">
+            <input type="hidden" id="editId" />
+            <label>Date:<input type="date" id="editDate" required/></label>
+            <label>Time:<input type="time" id="editTime" required/></label>
+            <label>Location:<input type="text" id="editLocation" required/></label>
+            <label>Species:<input type="text" id="editSpecies" required/></label>
+            <label>Length (in):<input type="number" step="0.01" id="editLength" required/></label>
+            <label>Weight (lbs):<input type="number" step="0.01" id="editWeight" required/></label>
+            <label>Water Temp (°F):<input type="number" id="editTemperature" required/></label>
+            <label>Bait:<input type="text" id="editBait" required/></label>
+
+
+            <div class="modal-actions">
+              <button type="submit" class="primary-btn">Save</button>
+              <button type="button" class="muted-btn" onclick="closeEditForm()">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
   </div>
-      <div class="table-wrap">
-        <table id="catchesTable" class="catches-table">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Location</th>
-              <th>Species</th>
-              <th>Length (in)</th>
-              <th>Weight (lbs)</th>
-              <th>Water Temp (&deg;F)</th>
-              <th>Bait</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
 
-      <div id="paginationControls" class="pagination">
-        <button id="prevPage" disabled>Previous</button>
-        <span id="pageInfo"></span>
-        <button id="nextPage">Next</button>
-      </div>
-    </div>
-  </div>
 
-    <!-- Edit Modal -->
-    <div id="editModal" class="modal" role="dialog" aria-modal="true" aria-hidden="true">
-      <div class="modal-content">
-        <h3>Edit Catch</h3>
-        <form id="editForm" class="edit-form">
-          <input type="hidden" id="editId" />
-          <label>Date:<input type="date" id="editDate" required/></label>
-          <label>Time:<input type="time" id="editTime" required/></label>
-          <label>Location:<input type="text" id="editLocation" required/></label>
-          <label>Species:<input type="text" id="editSpecies" required/></label>
-          <label>Length (in):<input type="number" step="0.01" id="editLength" required/></label>
-          <label>Weight (lbs):<input type="number" step="0.01" id="editWeight" required/></label>
-          <label>Water Temp (&deg;F):<input type="number" id="editTemperature" required/></label>
-          <label>Bait:<input type="text" id="editBait" required/></label>
-
-          <div class="modal-actions">
-            <button type="submit" class="primary-btn">Save</button>
-            <button type="button" class="muted-btn" onclick="closeEditForm()">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
-
+  <!-- JS -->
   <script src="script.js"></script>
 </body>
 </html>
+
+
+

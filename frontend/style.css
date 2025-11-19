@@ -1,7 +1,11 @@
 /* ===== GENERAL RESET ===== */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-html, body { height: 100%; }
-body {
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+html, body {
+  height: 100%;
   font-family: "Segoe UI", Roboto, system-ui, -apple-system, "Helvetica Neue", Arial;
   background: #e8f5f3;
   color: #21323a;
@@ -9,17 +13,27 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* ===== HEADER / NAV ===== */
+
+/* ===== PAGE WRAPPER ===== */
+.page-wrap {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+
+/* ===== HEADER ===== */
 .site-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 12px; /* space between items when wrapped */
+  gap: 12px;
   padding: 14px 18px;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255, 255, 255, 0.9);
   border-radius: 12px;
-  box-shadow: 0 6px 18px rgba(15,40,40,0.06);
+  box-shadow: 0 6px 18px rgba(15, 40, 40, 0.06);
 }
+
 
 .brand h1 {
   font-size: 2rem;
@@ -27,19 +41,13 @@ body {
   color: #0b6b63;
 }
 
-.header-wrap{
-  padding: 16px;
-}
 
-.container-charts-main{
-  padding-top: 16px;
-}
-
-/* Navigation */
+/* ===== NAVIGATION ===== */
 .main-nav {
   display: flex;
   gap: 12px;
 }
+
 
 .main-nav .nav-link {
   background-color: #70a7a3;
@@ -50,43 +58,55 @@ body {
   font-weight: 500;
   border: 1px solid transparent;
   transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
+
 
 .main-nav .nav-link:hover {
   background-color: #0e8a7b;
   transform: translateY(-2px);
 }
 
+
 .main-nav .nav-link.active {
-  background: linear-gradient(180deg,#0f8b78,#08715f);
+  background: linear-gradient(180deg, #0f8b78, #08715f);
   border: none;
   color: white;
 }
 
-/* Optional: subtle shadow for button depth */
-.main-nav .nav-link {
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-}
 
 .main-nav .nav-link:active {
   transform: scale(0.97);
 }
 
-/* ===== FORM STYLING ===== */
-.log-section{
+
+/* ===== HEADINGS ===== */
+h2 {
+  color: #0b6b63;
+  margin: 6px 0 10px;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+
+/* ===== FORMS ===== */
+.log-section {
   padding: 16px 0;
 }
+
+
 .catch-form {
   width: 100%;
   max-width: 1024px;
   display: grid;
-  grid-template-columns: repeat(4, 1fr); /* 2x4 grid at desktop */
+  grid-template-columns: repeat(4, 1fr);
   gap: 12px;
   padding: 18px;
   background: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 8px 18px rgba(16,40,40,0.04);
+  box-shadow: 0 8px 18px rgba(16, 40, 40, 0.04);
 }
+
 
 .catch-form input[type="text"],
 .catch-form input[type="date"],
@@ -99,18 +119,18 @@ body {
   color: #0f2d2a;
 }
 
-/* Form actions (submit button) */
+
+/* Form submit button */
 .form-actions {
   grid-column: 1 / -1;
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 4px;
 }
 
-/* Primary button */
+
 .primary-btn {
-  background: linear-gradient(180deg,#0f8b78,#08715f);
+  background: linear-gradient(180deg, #0f8b78, #08715f);
   color: #fff;
   border: none;
   padding: 10px 18px;
@@ -118,15 +138,16 @@ body {
   font-weight: 700;
   cursor: pointer;
   width: 60%;
-  box-shadow: 0 6px 16px rgba(8,113,95,0.18);
-  transition: transform .12s ease, box-shadow .12s ease;
+  box-shadow: 0 6px 16px rgba(8, 113, 95, 0.18);
+  transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
-.primary-btn:hover { 
-  transform: translateY(-2px); 
-  box-shadow: 0 10px 24px rgba(8,113,95,0.18); 
+.primary-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 24px rgba(8, 113, 95, 0.18);
 }
 
-/* Muted button (used in modal) */
+
+/* Muted button (modals) */
 .muted-btn {
   background: #f2f4f3;
   color: #394a49;
@@ -137,6 +158,7 @@ body {
   cursor: pointer;
 }
 
+
 /* ===== TABLE ===== */
 .table-wrap {
   width: 100%;
@@ -146,22 +168,27 @@ body {
   background: white;
   padding: 12px;
   border-radius: 12px;
-  box-shadow: 0 6px 16px rgba(8,43,40,0.04);
-  display: block;
+  box-shadow: 0 6px 16px rgba(8, 43, 40, 0.04);
 }
+
 
 .catches-table {
   width: 100%;
   min-width: 900px;
   border-collapse: collapse;
 }
-.catches-table th, .catches-table td {
+
+
+.catches-table th,
+.catches-table td {
   padding: 10px 12px;
   text-align: center;
   border-bottom: 1px solid #eef6f4;
   font-size: 0.94rem;
   color: #133233;
 }
+
+
 .catches-table thead th {
   background: #0b6b63;
   color: white;
@@ -169,141 +196,139 @@ body {
   position: sticky;
   top: 0;
 }
+
+
 .catches-table td:last-child {
-  display: flex; 
-  flex-direction: column;         
-  justify-content: center; 
-  gap: 6px;                
-  align-items: center; 
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  align-items: center;
 }
-.catches-table tr:nth-child(even) { background: #fbfdfc; }
+
+
+.catches-table tr:nth-child(even) {
+  background: #fbfdfc;
+}
+
 
 /* Edit button */
-.catches-table td button.edit { 
-  background: linear-gradient(180deg, #12a18a, #0f8b78); 
-  color: white; 
-  border: none; 
+.catches-table td button.edit {
+  background: linear-gradient(180deg, #12a18a, #0f8b78);
+  color: white;
+  border: none;
   border-radius: 8px;
   padding: 6px 10px;
   cursor: pointer;
-  transition: all 0.15s ease;
   width: 80px;
   text-align: center;
+  transition: all 0.15s ease;
 }
-.catches-table td button.edit:hover { 
-  background: linear-gradient(180deg, #0f8b78, #08715f); 
-  transform: translateY(-1px); 
+.catches-table td button.edit:hover {
+  background: linear-gradient(180deg, #0f8b78, #08715f);
+  transform: translateY(-1px);
 }
 
+
 /* Delete button */
-.catches-table td button.delete { 
-  background: linear-gradient(180deg, #c94f4f, #b53f3f); 
-  color: white; 
-  border: none; 
+.catches-table td button.delete {
+  background: linear-gradient(180deg, #c94f4f, #b53f3f);
+  color: white;
+  border: none;
   border-radius: 8px;
   padding: 6px 10px;
   cursor: pointer;
-  transition: all 0.15s ease;
-  width: 80px; /* same width as edit */
+  width: 80px;
   text-align: center;
+  transition: all 0.15s ease;
 }
-.catches-table td button.delete:hover { 
-  background: linear-gradient(180deg, #b53f3f, #a03232); /* darker on hover */
-  transform: translateY(-1px); 
+.catches-table td button.delete:hover {
+  background: linear-gradient(180deg, #b53f3f, #a03232);
+  transform: translateY(-1px);
 }
 
-/* ===== MODAL ===== */
+
+/* ===== MODALS ===== */
 .modal {
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.45);
+  background: rgba(0, 0, 0, 0.45);
   z-index: 1100;
-
-  display: none;            /* hidden by default */
-  /* top-anchored flex layout so box sits at top area and won't center/scale */
-  display: flex;
-  align-items: flex-start;  /* anchor to top instead of center */
-  justify-content: center;
-  overflow: auto;           /* allow page to scroll if needed */
-  padding: 24px 12px;       /* space around modal box (so box doesn't touch edges) */
-}
-
-/* show modal when aria-hidden is false */
-.modal[aria-hidden="true"] {
   display: none;
+  align-items: flex-start;
+  justify-content: center;
+  overflow: auto;
+  padding: 24px 12px;
 }
 
-/* modal content: fixed box that DOES NOT shrink, but scrolls internally */
+
+.modal[aria-hidden="false"] {
+  display: flex;
+}
+
+
 .modal-content {
   background: #fff;
   width: 360px;
   max-width: 96%;
-  margin-top: 16px;                /* top offset from viewport */
+  margin-top: 16px;
   border-radius: 12px;
   padding: 22px;
-  box-shadow: 0 12px 28px rgba(3,20,20,0.18);
-
-  /* Important: don't let the box shrink, and keep intrinsic sizing */
-  flex: 0 0 auto;                  /* prevent flex shrinking/growing */
-
-  /* Constrain height to viewport and make content scroll inside the box */
-  max-height: calc(100vh - 48px);  /* leave some space above/below */
-  overflow-y: auto;                /* internal scroll when content > max-height */
+  box-shadow: 0 12px 28px rgba(3, 20, 20, 0.18);
+  flex: 0 0 auto;
+  max-height: calc(100vh - 48px);
+  overflow-y: auto;
 }
 
-/* optional: a small visual nicety for the inner scrollbar */
-.modal-content::-webkit-scrollbar { width: 8px; }
-.modal-content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 6px; }
-.modal-content h3 { color: #0b6b63; margin-bottom: 12px; }
+
+.modal-content h3 {
+  color: #0b6b63;
+  margin-bottom: 12px;
+}
+
+
 .modal-content label {
-  display:block;
-  font-size:0.9rem;
-  color:#243b39;
-  margin-bottom:8px;
-}
-.modal-content input { 
-  width:100%; 
-  padding:8px 10px; 
-  margin-top:6px; 
-  margin-bottom:10px; 
-  border-radius:8px; 
-  border:1px solid #e6efee; 
+  display: block;
+  font-size: 0.9rem;
+  color: #243b39;
+  margin-bottom: 8px;
 }
 
-/* Make modal buttons uniform in size */
-.modal-actions .primary-btn,
-.modal-actions .muted-btn {
-  flex: 1;                /* make both buttons take equal space */
-  min-width: 100px;       /* optional: ensures buttons don’t shrink too small */
-  text-align: center;     /* center text inside the buttons */
+
+.modal-content input {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid #e6efee;
 }
 
-/* Optional: add a gap between buttons if not already there */
+
+/* Modal action buttons */
 .modal-actions {
   display: flex;
-  gap: 12px;              /* keeps some space between the buttons */
+  gap: 12px;
 }
-
+.modal-actions .primary-btn,
+.modal-actions .muted-btn {
+  flex: 1;
+  min-width: 100px;
+  text-align: center;
+}
 .modal-actions .muted-btn {
   background: #70a7a3;
   color: white;
   border: none;
 }
 .modal-actions .muted-btn:hover {
-  background: linear-gradient(180deg,#0f8b78,#08715f);
+  background: linear-gradient(180deg, #0f8b78, #08715f);
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(8,113,95,0.18);
+  box-shadow: 0 10px 24px rgba(8, 113, 95, 0.18);
 }
+
 
 /* ===== CHARTS ===== */
-.chart-container {
-  width: 100%;
-  overflow-x: auto;
-  display: flex;
-  justify-content: center;
-  margin-bottom: 40px;
-}
-
 #chartCanvas {
   width: 900px;
   height: 480px;
@@ -311,10 +336,10 @@ body {
   background: white;
   border-radius: 12px;
   padding: 18px;
-  box-shadow: 0 6px 20px rgba(8,43,40,0.04);
+  box-shadow: 0 6px 20px rgba(8, 43, 40, 0.04);
 }
 
-/* Chart controls */
+
 .chart-controls {
   width: 100%;
   max-width: 1024px;
@@ -322,91 +347,15 @@ body {
   background: white;
   padding: 12px;
   border-radius: 12px;
-  display:flex;
-  align-items:center;
-  gap:12px;
-  justify-content:flex-start;
-  box-shadow: 0 6px 18px rgba(8,43,40,0.04);
-}
-
-.chart-controls label {
-  margin-right: 8px; /* extra space before dropdown */
-  min-width: 140px;   /* reserve enough space so it doesn't wrap */
-  display: inline-flex;
-  align-items: center;
-  font-weight: 600;
-  color: #0b6b63;
-  white-space: nowrap; /* prevent stacking on small widths */
-}
-
-/* Style the chart select to look like buttons */
-.select-wrapper select#chartSelect {
-  width: 100%;
-  padding: 10px 0;              /* match button padding */
-  border-radius: 10px;
-  border: none;
-  background: #70a7a3;          /* inactive button color */
-  color: White;               /* dark text like buttons */
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;
-
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-  text-align: center;           /* center text like buttons */
-  transition: background 0.2s ease, color 0.15s ease, box-shadow 0.15s ease;
-}
-
-.select-wrapper select#chartSelect {
-  background-color: #70a7a3; /* default light green */
-  color: white;
-}
-
-.select-wrapper select#chartSelect:hover,
-.select-wrapper select#chartSelect:focus {
-  background-color: #0f8b78; /* dark green */
-  color: white;
-}
-
-/* Hide the SVG arrow completely (you don’t want it) */
-.select-wrapper .select-arrow {
-  display: none;
-}
-
-.page-wrap {
-  max-width: 1024px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-.page-wrap h2 {
-  text-align: center;
-  margin-bottom: 16px;
-  color: #0b6b63;
-  font-size: 1.3rem;
-}
-
-.catches-wrap{
-  padding: 16px 0;
-}
-
-
-/* Chart control group */
-.chart-control-group {
   display: flex;
-  gap: 12px;
-  width: 100%;
   align-items: center;
-  justify-content: center;
-  font-size: 1.15rem;
-  font-weight: 600;
+  gap: 12px;
+  justify-content: flex-start;
+  box-shadow: 0 6px 18px rgba(8, 43, 40, 0.04);
 }
 
-.chart-controls label {
-  font-weight: 700;   /* makes text thicker (bold) */
-}
 
-/* Default: show buttons, hide select */
-.select-wrapper { display: none; }
+/* Chart buttons */
 .chart-buttons {
   display: flex;
   justify-content: center;
@@ -415,8 +364,6 @@ body {
   width: 100%;
   max-width: 900px;
 }
-
-/* Buttons share space equally and shrink when needed */
 .chart-buttons button {
   flex: 1 1 0;
   min-width: 80px;
@@ -425,82 +372,27 @@ body {
   border: none;
   font-weight: 600;
   cursor: pointer;
-  background: #70a7a3;              /* neutral gray background */
-  color: white;                   /* dark text */
+  background: #70a7a3;
+  color: white;
   transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
-  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
 }
-
-/* Hover effect — subtle lift */
 .chart-buttons button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
-
-/* Active (selected) button — green color */
 .chart-buttons button.active {
   background: linear-gradient(180deg, #0f8b78, #08715f);
   color: white;
-  transform: none; /* stays flat when active */
+  transform: none;
 }
 
-.chart-dropdown {
-  display: none; /* stays hidden until needed */
-  position: relative;
-}
 
-.chart-dropdown select {
-  width: 100%;
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: none;
-  background: #f2f4f3;               /* light neutral background */
-  color: #21323a;                    /* dark text for contrast */
-  font-weight: 600;
-  font-size: 0.95rem;
-  cursor: pointer;               
-  background-image: linear-gradient(180deg, #70a7a3, #5fb0b7); /* teal theme */
-  background-size: 100% 300%;
-  background-position: top;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
-  transition: background-position 0.2s ease, box-shadow 0.15s ease;
-}
-
-/* Hover and focus states — slight lift and brighter teal */
-.chart-dropdown select:hover,
-.chart-dropdown select:focus {
-  background-position: bottom;
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
-  outline: none;
-}
-
-/* Optional: keep them centered when space allows */
-.chart-control-group {
-  flex-wrap: nowrap;
-}
-
-/* ===== CATCHES HEADER (Title + Search Bar) ===== */
-.catches-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-  padding: 0px 18px;
-}
-
-.catches-header h2 {
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: #0b6b63;
-}
-
-/* Search bar styling */
+/* ===== SEARCH BAR ===== */
 .search-bar {
   display: flex;
   align-items: center;
 }
-
 .search-bar input {
   padding: 8px 14px;
   border: 1px solid #dce7e6;
@@ -512,14 +404,14 @@ body {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   width: 220px;
 }
-
 .search-bar input:focus {
   outline: none;
   border-color: #0f8b78;
   border-width: 2px;
 }
 
-/* ===== PAGINATION CONTROLS ===== */
+
+/* ===== PAGINATION ===== */
 .pagination {
   display: flex;
   justify-content: center;
@@ -528,7 +420,6 @@ body {
   margin-top: 18px;
   font-weight: 600;
 }
-
 .pagination button {
   background: linear-gradient(180deg, #0f8b78, #08715f);
   color: #fff;
@@ -536,22 +427,16 @@ body {
   border-radius: 10px;
   padding: 8px 16px;
   font-size: 0.95rem;
-  font-weight: 600;
   cursor: pointer;
   box-shadow: 0 4px 10px rgba(8, 113, 95, 0.18);
   transition: background 0.2s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
-
-/* Hover and focus */
 .pagination button:hover:not(:disabled),
 .pagination button:focus:not(:disabled) {
   background: linear-gradient(180deg, #0e7e6d, #076957);
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(8, 113, 95, 0.25);
-  outline: none;
 }
-
-/* Disabled state */
 .pagination button:disabled {
   background: #70a7a3;
   color: white;
@@ -559,59 +444,27 @@ body {
   box-shadow: none;
   transform: none;
 }
-
-/* Page info (center text between buttons) */
 #pageInfo {
   color: #0b6b63;
   font-size: 0.95rem;
   font-weight: 700;
 }
 
-/* ===== INPUT FIELD STYLING ===== */
-input[type="text"],
-input[type="number"],
-input[type="date"],
-input[type="time"],
-select,
-textarea {
-  border: 1.5px solid #ccc;
-  border-radius: 8px;
-  padding: 8px 10px;
-  font-size: 0.95rem;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-/* Focus effect — matches your green accent */
-input[type="text"]:focus,
-input[type="number"]:focus,
-input[type="date"]:focus,
-input[type="time"]:focus,
-select:focus,
-textarea:focus {
-  outline: none;
-  border-color: #0f8b78;
-  border-width: 2px;
-}
-
-/* ===== TYPOS & HEADINGS ===== */
-h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .catch-form {
     grid-template-columns: repeat(2, 1fr);
   }
-
-  /* Slightly shrink nav buttons on medium screens */
   .main-nav .nav-link {
     padding: 7px 12px;
     font-size: 0.95rem;
   }
-
   .form-actions .primary-btn {
-    width: 60%; /* or any percentage you want */
+    width: 60%;
   }
 }
+
 
 @media (max-width: 640px) {
   .site-header { padding: 12px; }
@@ -620,26 +473,17 @@ h2 { color: #0b6b63; margin: 6px 0 10px; font-size: 1.1rem; }
   .primary-btn { width: 100%; padding: 12px; }
   #chartCanvas { height: 360px; }
   .brand h1 { font-size: 1.6rem; }
-  .select-wrapper { display: inline-flex; }
-  .chart-buttons {
-    display: none;
-  }
 
-  .chart-dropdown {
-    display: block;
-  }
+
+  .select-wrapper { display: inline-flex; }
+  .chart-buttons { display: none; }
+
 
   .catches-header {
     flex-direction: column;
     align-items: stretch;
     margin-bottom: 12px;
   }
-
-  .search-bar {
-    width: 100%;
-  }
-
-  .search-bar input {
-    width: 100%;
-  }
+  .search-bar { width: 100%; }
+  .search-bar input { width: 100%; }
 }

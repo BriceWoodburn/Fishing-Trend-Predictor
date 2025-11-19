@@ -4,18 +4,30 @@ let filteredCatches = [];
 let currentPage = 1;
 const itemsPerPage = 25;
 
-/* -------------------- Home Page: Catches -------------------- */
-if (document.getElementById("catchForm")) {
-  const catchForm = document.getElementById("catchForm");
 
+/* -------------------- Home Page: Catches -------------------- */
+const catchForm = document.getElementById("catchForm");
+
+
+if (catchForm) {
+  /**
+   * Event listener for submitting a new catch.
+   * Converts form data into an object, applies default date/time if missing,
+   * sends it to the backend, and reloads the table.
+   */
   catchForm.addEventListener("submit", async (e) => {
     e.preventDefault();
+
+
     const formData = new FormData(catchForm);
     const catchData = Object.fromEntries(formData);
 
-    // Default date/time
+
+    // Set default date/time if missing
     if (!catchData.date) catchData.date = new Date().toISOString().slice(0, 10);
-    if (!catchData.time) catchData.time = new Date().toLocaleTimeString('en-GB', { hour12: false });
+    if (!catchData.time)
+      catchData.time = new Date().toLocaleTimeString("en-GB", { hour12: false });
+
 
     try {
       const res = await fetch(`${backendUrl}/log-catch`, {
@@ -24,7 +36,10 @@ if (document.getElementById("catchForm")) {
         body: JSON.stringify(catchData),
       });
 
+
       const result = await res.json();
+
+
       if (result.success) {
         catchForm.reset();
         await loadCatches();
@@ -36,18 +51,43 @@ if (document.getElementById("catchForm")) {
     }
   });
 
+
   loadCatches();
 }
 
-// Load catches and populate table
+
+/* -------------------- Load & Render Catches -------------------- */
+
+
+/**
+ * Loads all catches from the backend API and stores them locally.
+ * Initializes filteredCatches for searching and renders the table.
+ *
+ * @param {boolean} keepPage - If true, keeps the current page instead of resetting to 1.
+ */
 async function loadCatches(keepPage = false) {
   try {
     const res = await fetch(`${backendUrl}/catches`);
     const json = await res.json();
     allCatches = json.data || [];
 
-    // Initially, filteredCatches = allCatches
-    filteredCatches = [...allCatches];
+    // Sort allCatches by date & time descending
+    allCatches.sort((a, b) => {
+      const dateTimeA = new Date(`${a.date}T${a.time || "00:00"}`);
+      const dateTimeB = new Date(`${b.date}T${b.time || "00:00"}`);
+      
+      if (dateTimeA > dateTimeB) return -1;
+      if (dateTimeA < dateTimeB) return 1;
+
+      return b.id - a.id;
+    });
+
+    // Re-apply search filter if there is an active search
+    if (searchInput?.value) {
+      applyCatchFilter();
+    } else {
+      filteredCatches = [...allCatches];
+    }
 
     const pageToShow = keepPage ? currentPage : 1;
     renderTablePage(pageToShow);
@@ -56,82 +96,128 @@ async function loadCatches(keepPage = false) {
   }
 }
 
+
+/* -------------------- Search Functionality -------------------- */
 const searchInput = document.getElementById("catchSearch");
+
+
 searchInput?.addEventListener("input", () => {
-  const keyword = searchInput.value.toLowerCase().trim();
-
-  filteredCatches = allCatches.filter(c => {
-  const formattedDate = c.date ? formatDate(c.date) : "";
-  const formattedTime = c.time ? formatTime(c.time) : "";
-
-  return (
-    formattedDate.toLowerCase().includes(keyword) ||
-    formattedTime.toLowerCase().includes(keyword) ||
-    Object.entries(c).some(([key, val]) => {
-      // skip date and time since already checked
-      if (key === "date" || key === "time") return false;
-      return val !== null && val !== undefined && String(val).toLowerCase().includes(keyword);
-    })
-  );
-  });
-
-  // Reset to page 1 whenever a search is performed
-  renderTablePage(1);
+  applyCatchFilter();
+  renderTablePage(1); // always reset to first page on new search
 });
 
+function applyCatchFilter() {
+  const keyword = searchInput?.value.toLowerCase().trim() || "";
+
+  // Filter first
+  filteredCatches = allCatches.filter((c) => {
+    const formattedDate = c.date ? formatDate(c.date) : "";
+    const formattedTime = c.time ? formatTime(c.time) : "";
+
+    return (
+      formattedDate.toLowerCase().includes(keyword) ||
+      formattedTime.toLowerCase().includes(keyword) ||
+      Object.entries(c).some(([key, val]) => {
+        if (key === "date" || key === "time") return false;
+        return val !== null && val !== undefined && String(val).toLowerCase().includes(keyword);
+      })
+    );
+  });
+
+  // Sort by date, time, then ID descending
+  filteredCatches.sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time || "00:00"}`);
+    const dateTimeB = new Date(`${b.date}T${b.time || "00:00"}`);
+    
+    if (dateTimeA > dateTimeB) return -1;
+    if (dateTimeA < dateTimeB) return 1;
+
+    return b.id - a.id;
+  });
+}
+
+  // Sort by date, then time, then ID descending
+  filteredCatches.sort((a, b) => {
+    const dateTimeA = new Date(`${a.date}T${a.time || "00:00"}`);
+    const dateTimeB = new Date(`${b.date}T${b.time || "00:00"}`);
+    
+    if (dateTimeA > dateTimeB) return -1;
+    if (dateTimeA < dateTimeB) return 1;
+
+    return b.id - a.id; // newest added first if same date & time
+  });
+
+
+/* -------------------- Table Rendering & Pagination -------------------- */
+
+
+/**
+ * Renders a page of the catches table based on filteredCatches.
+ *
+ * @param {number} page - The page number to display.
+ */
 function renderTablePage(page) {
   currentPage = page;
   const tbody = document.querySelector("#catchesTable tbody");
   tbody.innerHTML = "";
 
+
   const start = (page - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-const pageData = filteredCatches.slice(start, end);
+  const pageData = filteredCatches.slice(start, end);
 
-  pageData.forEach(c => {
+
+  pageData.forEach((catchItem) => {
     const tr = document.createElement("tr");
 
-    // Format date and time for display
-    const formattedDate = c.date ? formatDate(c.date) : "";
-    const formattedTime = c.time ? formatTime(c.time) : "";
+
+    const formattedDate = catchItem.date ? formatDate(catchItem.date) : "";
+    const formattedTime = catchItem.time ? formatTime(catchItem.time) : "";
+
 
     tr.innerHTML = `
       <td>${formattedDate}</td>
       <td>${formattedTime}</td>
-      <td>${escapeHtml(c.location)}</td>
-      <td>${escapeHtml(c.species)}</td>
-      <td>${c.length_in ?? ''}</td>
-      <td>${c.weight_lbs ?? ''}</td>
-      <td>${c.temperature ?? ''}</td>
-      <td>${escapeHtml(c.bait || "")}</td>
+      <td>${escapeHtml(catchItem.location)}</td>
+      <td>${escapeHtml(catchItem.species)}</td>
+      <td>${catchItem.length_in ?? ""}</td>
+      <td>${catchItem.weight_lbs ?? ""}</td>
+      <td>${catchItem.temperature ?? ""}</td>
+      <td>${escapeHtml(catchItem.bait || "")}</td>
       <td>
-        <button class="edit" onclick='openEditForm(${JSON.stringify(c)})'>Edit</button>
-        <button class="delete" onclick='deleteCatch(${c.id})'>Delete</button>
+        <button class="edit" onclick='openEditForm(${JSON.stringify(catchItem)})'>Edit</button>
+        <button class="delete" onclick='deleteCatch(${catchItem.id})'>Delete</button>
       </td>
     `;
     tbody.appendChild(tr);
   });
 
+
   updatePaginationControls();
 }
 
+
+/**
+ * Updates pagination buttons and current page display.
+ */
 function updatePaginationControls() {
   const totalPages = Math.ceil(filteredCatches.length / itemsPerPage);
   document.getElementById("pageInfo").textContent = `Page ${currentPage} of ${totalPages}`;
-
   document.getElementById("prevPage").disabled = currentPage === 1;
   document.getElementById("nextPage").disabled = currentPage === totalPages;
 }
 
-// Scroll smoothly to top of table section
+
+/**
+ * Scrolls smoothly to the top of the table section.
+ */
 function scrollToTableTop() {
   const tableSection = document.querySelector(".catches-wrap");
-  if (tableSection) {
-    tableSection.scrollIntoView({ behavior: "smooth" });
-  }
+  if (tableSection) tableSection.scrollIntoView({ behavior: "smooth" });
 }
 
-// Page navigation
+
+// Pagination button events
 document.getElementById("prevPage")?.addEventListener("click", () => {
   if (currentPage > 1) {
     renderTablePage(currentPage - 1);
@@ -139,122 +225,188 @@ document.getElementById("prevPage")?.addEventListener("click", () => {
   }
 });
 
+
 document.getElementById("nextPage")?.addEventListener("click", () => {
-  const totalPages = Math.ceil(allCatches.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredCatches.length / itemsPerPage);
   if (currentPage < totalPages) {
     renderTablePage(currentPage + 1);
     scrollToTableTop();
   }
 });
 
+
+/* -------------------- Utility Functions -------------------- */
+
+
+/**
+ * Escapes HTML characters to prevent injection when rendering strings.
+ *
+ * @param {string} text - The text to escape.
+ * @returns {string} Escaped text safe for HTML.
+ */
 function escapeHtml(text = "") {
-  return String(text).replace(/[&<>"']/g, function (m) {
-    return ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' })[m];
-  });
+  return String(text).replace(/[&<>"']/g, (m) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  }[m]));
 }
 
-// Delete catch
+
+/* -------------------- Delete Catch -------------------- */
+
+
+/**
+ * Sends a DELETE request to remove a catch by ID.
+ *
+ * @param {number} id - The ID of the catch to delete.
+ */
 async function deleteCatch(id) {
-  if (id.deleteCatch) return;
   try {
     const res = await fetch(`${backendUrl}/delete-catch/${id}`, { method: "DELETE" });
     const result = await res.json();
+
+
     if (result.success) loadCatches(true);
-    else alert("❌ Error deleting catch: " + (result.message || "Unknown error"));
+    else alert("Error deleting catch: " + (result.message || "Unknown error"));
   } catch (err) {
-    alert("❌ Network or server error: " + err.message);
+    alert("Network or server error: " + err.message);
   }
 }
 
-// Edit modal
-function openEditForm(c) {
+
+/* -------------------- Edit Catch Modal -------------------- */
+
+
+/**
+ * Opens the edit modal and populates it with a catch's data.
+ *
+ * @param {Object} catchItem - The catch object to edit.
+ */
+function openEditForm(catchItem) {
   const modal = document.getElementById("editModal");
   modal.setAttribute("aria-hidden", "false");
   modal.style.display = "flex";
 
-  // Clean up time to be HH:MM only
-  let cleanTime = c.time || "";
-  if (cleanTime.includes(":")) {
-    // If time has seconds (HH:MM:SS), trim to HH:MM
-    cleanTime = cleanTime.split(":").slice(0, 2).join(":");
-  }
 
-  document.getElementById("editId").value = c.id;
-  document.getElementById("editDate").value = c.date || "";
+  let cleanTime = catchItem.time || "";
+  if (cleanTime.includes(":")) cleanTime = cleanTime.split(":").slice(0, 2).join(":");
+
+
+  document.getElementById("editId").value = catchItem.id;
+  document.getElementById("editDate").value = catchItem.date || "";
   document.getElementById("editTime").value = cleanTime;
-  document.getElementById("editLocation").value = c.location || "";
-  document.getElementById("editSpecies").value = c.species || "";
-  document.getElementById("editLength").value = c.length_in || "";
-  document.getElementById("editWeight").value = c.weight_lbs || "";
-  document.getElementById("editTemperature").value = c.temperature || "";
-  document.getElementById("editBait").value = c.bait || "";
+  document.getElementById("editLocation").value = catchItem.location || "";
+  document.getElementById("editSpecies").value = catchItem.species || "";
+  document.getElementById("editLength").value =
+  catchItem.length_in != null ? catchItem.length_in : "";
+  document.getElementById("editWeight").value =
+  catchItem.weight_lbs != null ? catchItem.weight_lbs : "";
+  document.getElementById("editTemperature").value =
+  catchItem.temperature != null ? catchItem.temperature : "";
+  document.getElementById("editBait").value = catchItem.bait || "";
 }
 
+
+/**
+ * Closes the edit modal.
+ */
 function closeEditForm() {
   const modal = document.getElementById("editModal");
   modal.setAttribute("aria-hidden", "true");
   modal.style.display = "none";
 }
 
-if (document.getElementById("editForm")) {
-  document.getElementById("editForm").addEventListener("submit", async (e) => {
+
+const editForm = document.getElementById("editForm");
+
+
+if (editForm) {
+  editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const id = document.getElementById("editId").value;
 
-    const updatedCatch = {
+    const payload = {
       date: document.getElementById("editDate").value,
       time: document.getElementById("editTime").value,
       location: document.getElementById("editLocation").value,
       species: document.getElementById("editSpecies").value,
-      length_in: parseFloat(document.getElementById("editLength").value),
-      weight_lbs: parseFloat(document.getElementById("editWeight").value),
-      temperature: document.getElementById("editTemperature").value,
+      length_in: (() => { const v = parseFloat(document.getElementById("editLength").value); return Number.isFinite(v) ? v : document.getElementById("editLength").value; })(),
+      weight_lbs: (() => { const v = parseFloat(document.getElementById("editWeight").value); return Number.isFinite(v) ? v : document.getElementById("editWeight").value; })(),
+      temperature: (() => { const v = parseFloat(document.getElementById("editTemperature").value); return Number.isFinite(v) ? v : document.getElementById("editTemperature").value; })(),
       bait: document.getElementById("editBait").value,
     };
+
+    // Log payload we are about to send
+    console.log("PUT payload:", payload);
 
     try {
       const res = await fetch(`${backendUrl}/edit-catch/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(updatedCatch),
+        body: JSON.stringify(payload),
       });
 
-      if (res.ok) {
-        closeEditForm();
-        loadCatches(true);
+      // Always capture raw response text so we see validation details even if not valid JSON
+      const raw = await res.text();
+      console.log("PUT response status:", res.status);
+      console.log("RESPONSE TEXT:", raw);
+
+      if (!res.ok) {
+        alert(`Update failed: ${res.status} — check console for details.`);
       } else {
-        console.error("Failed to update catch");
+        // success path
+        closeEditForm();
+        if (typeof loadCatches === "function") { 
+          await loadCatches(true);  // reload allCatches from backend
+          renderTablePage(currentPage); // stay on the current page
+        }
       }
     } catch (err) {
-      console.error("Error:", err);
+      console.error("Network error while updating catch:", err);
+      alert("Network error — see console.");
     }
   });
 }
 
-// Close modal on Escape
+
+
+// Close modal on Escape key
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeEditForm();
 });
 
+
+/* -------------------- Date & Time Formatting -------------------- */
+
+
+/**
+ * Converts ISO date string to "MM/DD/YYYY" format.
+ *
+ * @param {string} isoDate - ISO-formatted date string.
+ * @returns {string} Formatted date string.
+ */
 function formatDate(isoDate) {
-  const date = new Date(isoDate);
-  return date.toLocaleDateString("en-US", {
-    month: "2-digit",
-    day: "2-digit",
-    year: "numeric",
-  });
+  if (!isoDate) return "";
+  const [year, month, day] = isoDate.split("-");
+  return `${month}/${day}/${year}`;
 }
 
-// Utility: format time as HH:MM AM/PM
-function formatTime(timeString) {
-  // Create a temporary Date object with today's date + given time
-  const [hour, minute] = timeString.split(":");
-  const date = new Date();
-  date.setHours(hour, minute);
 
-  return date.toLocaleTimeString("en-US", {
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+/**
+ * Converts time string "HH:MM" to formatted 12-hour string with AM/PM.
+ *
+ * @param {string} timeString - Time string in "HH:MM" format.
+ * @returns {string} Formatted time string like "2:30 PM".
+ */
+function formatTime(timeString) {
+  if (!timeString) return "";
+  let [hour, minute] = timeString.split(":").map(Number);
+
+  const ampm = hour >= 12 ? "PM" : "AM";
+  hour = hour % 12 || 12;
+
+  return `${hour}:${minute.toString().padStart(2, "0")} ${ampm}`;
 }
