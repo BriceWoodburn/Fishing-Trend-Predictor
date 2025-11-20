@@ -98,12 +98,12 @@ async function loadCatches(keepPage = false) {
 
 
 /* -------------------- Search Functionality -------------------- */
-const searchInput = document.getElementById("catchSearch");
+const searchInput = document.getElementById("search-bar");
 
 
 searchInput?.addEventListener("input", () => {
   applyCatchFilter();
-  renderTablePage(1); // always reset to first page on new search
+  renderTablePage(1);
 });
 
 function applyCatchFilter() {

@@ -36,9 +36,6 @@
               <option value="averageWeightChart">Average Weight</option>
               <option value="averageLengthChart">Average Length</option>
             </select>
-            <svg class="select-arrow" width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M7 10l5 5 5-5z" fill="currentColor"/>
-            </svg>
           </div>
 
 
@@ -56,7 +53,9 @@
 
       <!-- Chart Canvas -->
       <section class="chart-wrapper">
-        <canvas id="chartCanvas" aria-label="Fishing data chart"></canvas>
+        <div class="chart-inner">
+          <canvas id="chartCanvas"></canvas>
+        </div>
       </section>
     </main>
   </div>

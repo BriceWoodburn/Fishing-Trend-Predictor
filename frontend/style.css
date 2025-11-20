@@ -84,7 +84,7 @@ html, body {
 h2 {
   color: #0b6b63;
   margin: 6px 0 10px;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   text-align: center;
 }
 
@@ -107,6 +107,10 @@ h2 {
   box-shadow: 0 8px 18px rgba(16, 40, 40, 0.04);
 }
 
+input:focus{
+  outline-color: #0f8b78;
+  outline-width: 2px;
+}
 
 .catch-form input[type="text"],
 .catch-form input[type="date"],
@@ -355,18 +359,36 @@ h2 {
 }
 
 
-/* Chart buttons */
-.chart-buttons {
+/* Chart controls container */
+.chart-controls {
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  gap: 12px;
+  margin-bottom: 16px;
+}
+
+/* Chart control group: take full width and allow flex children */
+.chart-control-group {
+  display: flex;
   width: 100%;
   max-width: 900px;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
+
+/* Buttons container */
+.chart-buttons {
+  display: flex;
+  flex: 1 1 auto;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* Buttons themselves: grow and shrink equally */
 .chart-buttons button {
   flex: 1 1 0;
-  min-width: 80px;
+  min-width: 100px;
   padding: 10px 0;
   border-radius: 10px;
   border: none;
@@ -374,42 +396,130 @@ h2 {
   cursor: pointer;
   background: #70a7a3;
   color: white;
-  transition: background 0.15s ease, color 0.15s ease, transform 0.12s ease;
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
 }
+
 .chart-buttons button:hover {
+  box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+  background: linear-gradient(180deg, #0f8b78, #08715f);
   transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
+
 .chart-buttons button.active {
   background: linear-gradient(180deg, #0f8b78, #08715f);
   color: white;
   transform: none;
 }
 
-
-/* ===== SEARCH BAR ===== */
-.search-bar {
-  display: flex;
+/* Styled dropdown */
+.select-wrapper {
+  display: none;
+  flex: 1 1 100%;
+  position: relative;
+  justify-content: center;
   align-items: center;
+  gap: 15px;
+  flex-wrap: wrap;
 }
-.search-bar input {
-  padding: 8px 14px;
+
+.select-wrapper label{
+  font-size: 1.2rem;
+  color: #0b6b63;
+  font-weight: 700;
+}
+
+/* Style the select dropdown */
+#chartSelect {
+  width: 100%;
+  padding: 10px 16px;
+  border-radius: 12px;
   border: 1px solid #dce7e6;
-  border-radius: 10px;
   font-size: 0.95rem;
-  color: #21323a;
-  background: #ffffff;
-  box-shadow: 0 3px 8px rgba(8, 43, 40, 0.04);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  width: 220px;
+  color: #0b6b63;
+  background: #fff;
+  cursor: pointer;
+  max-width: 400px;
 }
-.search-bar input:focus {
+
+/* Focus & hover effect to match other inputs */
+#chartSelect:focus {
   outline: none;
   border-color: #0f8b78;
   border-width: 2px;
 }
 
+#chartSelect:hover {
+  border-color: #0f8b78;
+}
+
+.chart-wrapper {
+  overflow-x: auto;
+  overflow-y: auto;
+  max-width: 100%;
+  padding-bottom: 10px;
+  background: #ffffff;
+  border: 1px solid #d0d7de;
+  border-radius: 16px;
+  padding: 16px;
+  overflow: hidden;  
+}
+
+#chartCanvas {
+  display: block;
+  margin: 0 auto;
+}
+
+.chart-inner {
+  overflow: auto;
+  border-radius: 0 0 16px 16px;
+}
+
+.chart-inner canvas {
+  min-width: 900px;
+  min-height: 500px;
+}
+
+.chart-inner canvas {
+  min-width: 900px;
+  min-height: 500px;
+}
+
+/* ===== SEARCH BAR ===== */
+.table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  margin-top: 40px;
+}
+
+.table-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.table-header input {
+  padding: 10px 16px;
+  border: 1px solid #dce7e6;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  background: #ffffff;
+  color: #21323a;
+
+  width: 260px;
+  max-width: 100%;
+  flex-shrink: 1;
+}
+
+.table-header input:focus {
+  outline: none;
+  border-color: #0f8b78;
+  border-width: 2px;
+}
+
+.table-header input:hover {
+  border-color: #0f8b78;
+}
 
 /* ===== PAGINATION ===== */
 .pagination {
@@ -418,6 +528,7 @@ h2 {
   align-items: center;
   gap: 12px;
   margin-top: 18px;
+  padding-bottom: 18px;
   font-weight: 600;
 }
 .pagination button {
@@ -451,6 +562,7 @@ h2 {
 }
 
 
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .catch-form {
@@ -465,7 +577,6 @@ h2 {
   }
 }
 
-
 @media (max-width: 640px) {
   .site-header { padding: 12px; }
   .catch-form { grid-template-columns: 1fr; padding: 14px; }
@@ -474,9 +585,18 @@ h2 {
   #chartCanvas { height: 360px; }
   .brand h1 { font-size: 1.6rem; }
 
-
-  .select-wrapper { display: inline-flex; }
   .chart-buttons { display: none; }
+  .select-wrapper { display: inline-flex; flex: 1; }
+  #chartSelect {
+    width: 100%;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: 1px solid #dce7e6;
+    font-size: 0.95rem;
+    background: #fff;
+    color: #21323a;
+    box-shadow: 0 3px 8px rgba(8, 43, 40, 0.06);
+  }
 
 
   .catches-header {
@@ -485,5 +605,8 @@ h2 {
     margin-bottom: 12px;
   }
   .search-bar { width: 100%; }
-  .search-bar input { width: 100%; }
+  .search-bar input {
+  width: 100%;
+  max-width: 260px;
+}
 }

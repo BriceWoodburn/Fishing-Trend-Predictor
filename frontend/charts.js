@@ -49,8 +49,16 @@ async function renderChart(chartType) {
     return;
   }
 
+  const canvas = document.getElementById("chartCanvas");
+  const wrapper = canvas.parentElement;
 
-  const ctx = document.getElementById("chartCanvas").getContext("2d");
+  const containerWidth = wrapper.clientWidth;
+  const minWidth = 900;
+
+  canvas.width = Math.max(containerWidth, minWidth);
+  canvas.height = 600;
+
+  const ctx = canvas.getContext("2d");
 
 
   if (chartInstance) chartInstance.destroy();
@@ -80,7 +88,7 @@ async function renderChart(chartType) {
           ],
         },
         options: {
-          responsive: true,
+          responsive: false,
           maintainAspectRatio: false,
           plugins: { legend: { display: false } },
           scales: { y: { beginAtZero: true } },
@@ -119,7 +127,7 @@ async function renderChart(chartType) {
           ],
         },
         options: {
-          responsive: true,
+          responsive: false,
           maintainAspectRatio: false,
           scales: {
             x: { title: { display: true, text: "Date" } },
@@ -160,7 +168,7 @@ async function renderChart(chartType) {
             },
           ],
         },
-        options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } },
+        options: { responsive: false, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } },
       });
       break;
     }
@@ -192,7 +200,7 @@ async function renderChart(chartType) {
             },
           ],
         },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } },
+        options: { responsive: false, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } },
       });
       break;
     }
@@ -224,7 +232,7 @@ async function renderChart(chartType) {
           ],
         },
         options: {
-          responsive: true,
+          responsive: false,
           maintainAspectRatio: false,
           indexAxis: "y",
           scales: { x: { beginAtZero: true } },
