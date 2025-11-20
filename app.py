@@ -1,6 +1,5 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from supabase import create_client, Client
@@ -31,7 +30,7 @@ app.add_middleware(
 )
 
 # Serve the frontend folder at the root URL
-app.mount("/static", StaticFiles(directory="frontend"), name="static")
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 # ---------------- Pydantic Model ----------------
 class Catch(BaseModel):
@@ -48,11 +47,6 @@ class Catch(BaseModel):
 
 
 # ---------------- API Endpoints ----------------
-@app.get("/")
-def serve_index():
-    return FileResponse("frontend/index.html")
-
-
 @app.post("/log-catch")
 def logCatch(catch: Catch):
     """
