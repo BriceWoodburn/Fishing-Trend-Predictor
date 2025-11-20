@@ -1,9 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
-import os
 from supabase import create_client, Client
 from datetime import datetime
+import os
 import traceback
 import sys
 
@@ -21,8 +22,7 @@ app = FastAPI()
 
 
 # Serve the frontend folder at the root URL
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
-
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # ---------------- Pydantic Model ----------------
 class Catch(BaseModel):
@@ -39,6 +39,11 @@ class Catch(BaseModel):
 
 
 # ---------------- API Endpoints ----------------
+@app.get("/")
+def root():
+    return FileResponse(os.path.join("frontend", "index.html"))
+
+
 @app.post("/log-catch")
 def logCatch(catch: Catch):
     """
