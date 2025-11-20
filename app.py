@@ -1,11 +1,12 @@
 from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import os
 from supabase import create_client, Client
 from datetime import datetime
 import traceback
 import sys
+
 
 
 # ---------------- Supabase Setup ----------------
@@ -19,14 +20,8 @@ supabase: Client = create_client(url, key)
 app = FastAPI()
 
 
-# Allow frontend to communicate with backend
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Serve the frontend folder at the root URL
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
 
 
 # ---------------- Pydantic Model ----------------
