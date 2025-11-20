@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+import os
 from supabase import create_client, Client
 from datetime import datetime
 import traceback
@@ -8,9 +9,10 @@ import sys
 
 
 # ---------------- Supabase Setup ----------------
-SUPABASE_URL = "https://fczfpqfwcxfhyakgggbf.supabase.co"
-SUPABASE_KEY = "sb_secret_7X0ghBjHEJeyBBeSN_yFRQ_CIgwBtvu"
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+url = os.getenv("SUPABASE_URL")
+key = os.getenv("SUPABASE_KEY")
+
+supabase: Client = create_client(url, key)
 
 
 # ---------------- FastAPI Setup ----------------
@@ -20,7 +22,7 @@ app = FastAPI()
 # Allow frontend to communicate with backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Replace "*" with your frontend URL in production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
