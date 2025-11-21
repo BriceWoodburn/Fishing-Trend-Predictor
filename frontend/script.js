@@ -1,4 +1,4 @@
-const backendUrl = "https://castiq.onrender.com/index.html";
+const backendUrl = "https://castiq.onrender.com";
 let allCatches = [];
 let filteredCatches = [];
 let currentPage = 1;
