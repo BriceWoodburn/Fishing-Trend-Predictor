@@ -19,6 +19,13 @@ if (catchForm) {
   catchForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    document.getElementById("date").addEventListener("focus", function () {
+      this.type = "date";
+    });
+
+    document.getElementById("time").addEventListener("focus", function () {
+      this.type = "time";
+    });
 
     const formData = new FormData(catchForm);
     const catchData = Object.fromEntries(formData);
@@ -328,6 +335,14 @@ if (editForm) {
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const id = document.getElementById("editId").value;
+
+      document.getElementById("editDate").addEventListener("focus", function () {
+        this.type = "date";
+      });
+
+      document.getElementById("editTime").addEventListener("focus", function () {
+        this.type = "time";
+      });
 
     const payload = {
       date: document.getElementById("editDate").value,
