@@ -28,8 +28,8 @@
       <section class="log-section" aria-labelledby="logCatchTitle">
         <h2 id="logCatchTitle">Log a New Catch</h2>
         <form id="catchForm" class="catch-form" autocomplete="off" aria-label="Log new catch form">
-          <input type="date" name="date" aria-label="Date of catch" />
-          <input type="time" name="time" aria-label="Time of catch" />
+          <input type="date" id="date" placeholder="Select date" />
+          <input type="time" id="time" placeholder="Select time" />
           <input type="text" name="location" placeholder="Location" required aria-label="Location" />
           <input type="text" name="species" placeholder="Species" required aria-label="Species" />
           <input type="number" step="0.01" name="length_in" placeholder="Length (inches)" required aria-label="Length in inches" />
@@ -90,8 +90,8 @@
           <h3 id="editCatchTitle">Edit Catch</h3>
           <form id="editForm" class="edit-form" aria-label="Edit catch form">
             <input type="hidden" id="editId" />
-            <label>Date:<input type="date" id="editDate" required/></label>
-            <label>Time:<input type="time" id="editTime" required/></label>
+            <label>Date:<input type="date" id="editDate" placeholder="Select date" required/></label>
+            <label>Time:<input type="time" id="editTime" placeholder="Select time" required/></label>
             <label>Location:<input type="text" id="editLocation" required/></label>
             <label>Species:<input type="text" id="editSpecies" required/></label>
             <label>Length (in):<input type="number" step="0.01" id="editLength" required/></label>

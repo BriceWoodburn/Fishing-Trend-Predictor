@@ -52,6 +52,10 @@ class Catch(BaseModel):
 def get_index():
     return FileResponse("frontend/index.html")
 
+@app.get("/")
+def get_index():
+    return FileResponse("frontend/index.html")
+
 # Serve charts page
 @app.get("/charts.html")
 def get_charts():
