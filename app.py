@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 from supabase import create_client, Client
 from datetime import datetime
@@ -11,8 +12,11 @@ import sys
 
 
 # ---------------- Supabase Setup ----------------
-url = os.environ.get("SUPABASE_URL")
-key = os.environ.get("SUPABASE_KEY")
+# url = os.environ.get("SUPABASE_URL")
+# key = os.environ.get("SUPABASE_KEY")
+
+url = "https://fczfpqfwcxfhyakgggbf.supabase.co"
+key = "sb_secret_7X0ghBjHEJeyBBeSN_yFRQ_CIgwBtvu"
 
 supabase: Client = create_client(url, key)
 
@@ -23,14 +27,14 @@ app = FastAPI()
 # CORS to allow frontend to call APIs
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://castiq.onrender.com"],
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["https://castiq.onrender.com"],
-    allow_headers=["https://castiq.onrender.com"],
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 # Serve the frontend folder at the root URL
-app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
+app.mount("/static", StaticFiles(directory="frontend"), name="static")
 
 # ---------------- Pydantic Model ----------------
 class Catch(BaseModel):
@@ -47,6 +51,15 @@ class Catch(BaseModel):
 
 
 # ---------------- API Endpoints ----------------
+@app.get("/index.html")
+def get_index():
+    return FileResponse("frontend/index.html")
+
+# Serve charts page
+@app.get("/charts.html")
+def get_charts():
+    return FileResponse("frontend/charts.html")
+
 @app.post("/log-catch")
 def logCatch(catch: Catch):
     """
@@ -134,4 +147,3 @@ async def editCatch(catchId: int, catch: Catch):
 
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
-
