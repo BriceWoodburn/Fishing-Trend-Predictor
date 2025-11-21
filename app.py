@@ -23,10 +23,10 @@ app = FastAPI()
 # CORS to allow frontend to call APIs
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://castiq.onrender.com"],
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["https://castiq.onrender.com"],
+    allow_headers=["https://castiq.onrender.com"],
 )
 
 # Serve the frontend folder at the root URL
