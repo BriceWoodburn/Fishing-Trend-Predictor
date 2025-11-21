@@ -9,6 +9,13 @@ const itemsPerPage = 25;
 /* -------------------- Home Page: Catches -------------------- */
 const catchForm = document.getElementById("catchForm");
 
+document.getElementById("date").addEventListener("focus", function () {
+  this.type = "date";
+});
+
+document.getElementById("time").addEventListener("focus", function () {
+  this.type = "time";
+});
 
 if (catchForm) {
   /**
@@ -18,14 +25,6 @@ if (catchForm) {
    */
   catchForm.addEventListener("submit", async (e) => {
     e.preventDefault();
-
-    document.getElementById("date").addEventListener("focus", function () {
-      this.type = "date";
-    });
-
-    document.getElementById("time").addEventListener("focus", function () {
-      this.type = "time";
-    });
 
     const formData = new FormData(catchForm);
     const catchData = Object.fromEntries(formData);
@@ -287,12 +286,20 @@ async function deleteCatch(id) {
 
 /* -------------------- Edit Catch Modal -------------------- */
 
+document.getElementById("editDate").addEventListener("focus", function () {
+  this.type = "date";
+});
+
+document.getElementById("editTime").addEventListener("focus", function () {
+  this.type = "time";
+});
 
 /**
  * Opens the edit modal and populates it with a catch's data.
  *
  * @param {Object} catchItem - The catch object to edit.
  */
+
 function openEditForm(catchItem) {
   const modal = document.getElementById("editModal");
   modal.setAttribute("aria-hidden", "false");
@@ -318,7 +325,7 @@ function openEditForm(catchItem) {
 }
 
 
-/**
+/*
  * Closes the edit modal.
  */
 function closeEditForm() {
@@ -335,14 +342,6 @@ if (editForm) {
   editForm.addEventListener("submit", async (e) => {
     e.preventDefault();
     const id = document.getElementById("editId").value;
-
-      document.getElementById("editDate").addEventListener("focus", function () {
-        this.type = "date";
-      });
-
-      document.getElementById("editTime").addEventListener("focus", function () {
-        this.type = "time";
-      });
 
     const payload = {
       date: document.getElementById("editDate").value,
