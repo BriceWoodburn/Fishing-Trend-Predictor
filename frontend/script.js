@@ -8,30 +8,6 @@ const itemsPerPage = 25;
 /* -------------------- Home Page: Catches -------------------- */
 const catchForm = document.getElementById("catchForm");
 
-function enableMobilePicker(input, type) {
-  input.addEventListener("touchend", function (e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (input.type !== type) {
-      input.type = type;
-    }
-
-    input.blur();
-
-    setTimeout(() => {
-      input.focus({ preventScroll: true });
-
-      if (input.showPicker) {
-        input.showPicker();
-      }
-    }, 50);
-  });
-}
-
-enableMobilePicker(document.getElementById("date"), "date");
-enableMobilePicker(document.getElementById("time"), "time");
-
 if (catchForm) {
   /**
    * Event listener for submitting a new catch.
@@ -300,23 +276,6 @@ async function deleteCatch(id) {
 
 
 /* -------------------- Edit Catch Modal -------------------- */
-
-const editDateInput = document.getElementById("editDate");
-const editTimeInput = document.getElementById("editTime");
-
-editDateInput.addEventListener("focus", function () {
-  if (this.type !== "date") {
-    this.type = "date";
-    setTimeout(() => this.showPicker?.(), 0);
-  }
-});
-
-editTimeInput.addEventListener("focus", function () {
-  if (this.type !== "time") {
-    this.type = "time";
-    setTimeout(() => this.showPicker?.(), 0);
-  }
-});
 
 /**
  * Opens the edit modal and populates it with a catch's data.

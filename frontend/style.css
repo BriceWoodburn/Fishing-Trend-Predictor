@@ -561,6 +561,29 @@ input:focus{
   font-weight: 700;
 }
 
+.styled-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  position: relative;
+}
+
+.styled-input:placeholder-shown::before {
+  content: attr(data-placeholder);
+  color: #888;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+}
+
+.styled-input:not(:placeholder-shown)::before {
+  content: "";
+}
+
 
 
 /* ===== RESPONSIVE ===== */
