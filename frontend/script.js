@@ -1,5 +1,4 @@
 const backendUrl = "https://castiq.onrender.com";
-//const backendUrl = "http://127.0.0.1:8000";
 let allCatches = [];
 let filteredCatches = [];
 let currentPage = 1;
@@ -9,12 +8,21 @@ const itemsPerPage = 25;
 /* -------------------- Home Page: Catches -------------------- */
 const catchForm = document.getElementById("catchForm");
 
-document.getElementById("date").addEventListener("focus", function () {
-  this.type = "date";
+const dateInput = document.getElementById("date");
+const timeInput = document.getElementById("time");
+
+dateInput.addEventListener("focus", function () {
+  if (this.type !== "date") {
+    this.type = "date";
+    setTimeout(() => this.showPicker?.(), 0);
+  }
 });
 
-document.getElementById("time").addEventListener("focus", function () {
-  this.type = "time";
+timeInput.addEventListener("focus", function () {
+  if (this.type !== "time") {
+    this.type = "time";
+    setTimeout(() => this.showPicker?.(), 0);
+  }
 });
 
 if (catchForm) {
@@ -286,12 +294,21 @@ async function deleteCatch(id) {
 
 /* -------------------- Edit Catch Modal -------------------- */
 
-document.getElementById("editDate").addEventListener("focus", function () {
-  this.type = "date";
+const editDateInput = document.getElementById("editDate");
+const editTimeInput = document.getElementById("editTime");
+
+editDateInput.addEventListener("focus", function () {
+  if (this.type !== "date") {
+    this.type = "date";
+    setTimeout(() => this.showPicker?.(), 0);
+  }
 });
 
-document.getElementById("editTime").addEventListener("focus", function () {
-  this.type = "time";
+editTimeInput.addEventListener("focus", function () {
+  if (this.type !== "time") {
+    this.type = "time";
+    setTimeout(() => this.showPicker?.(), 0);
+  }
 });
 
 /**
