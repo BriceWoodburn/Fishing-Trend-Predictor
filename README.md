@@ -21,5 +21,8 @@ I created CastIQ to combine two things I love, fishing and software development.
 | Layer | Technologies Used |
 |:------|:------------------|
 | Frontend | HTML, CSS, JavaScript, Chart.js |
-| Backend | Python, FastAPI |
+| Backend | Python, FastAPI, Render |
 | Database | Supabase (PostgreSQL) |
+
+## App Link
+<a href="https://castiq.onrender.com" target="_blank">CastIQ Link</a>
