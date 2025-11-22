@@ -8,22 +8,29 @@ const itemsPerPage = 25;
 /* -------------------- Home Page: Catches -------------------- */
 const catchForm = document.getElementById("catchForm");
 
-const dateInput = document.getElementById("date");
-const timeInput = document.getElementById("time");
+function enableMobilePicker(input, type) {
+  input.addEventListener("touchend", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-dateInput.addEventListener("focus", function () {
-  if (this.type !== "date") {
-    this.type = "date";
-    setTimeout(() => this.showPicker?.(), 20);
-  }
-});
+    if (input.type !== type) {
+      input.type = type;
+    }
 
-timeInput.addEventListener("focus", function () {
-  if (this.type !== "time") {
-    this.type = "time";
-    setTimeout(() => this.showPicker?.(), 20);
-  }
-});
+    input.blur();
+
+    setTimeout(() => {
+      input.focus({ preventScroll: true });
+
+      if (input.showPicker) {
+        input.showPicker();
+      }
+    }, 50);
+  });
+}
+
+enableMobilePicker(document.getElementById("date"), "date");
+enableMobilePicker(document.getElementById("time"), "time");
 
 if (catchForm) {
   /**
