@@ -14,14 +14,14 @@ const timeInput = document.getElementById("time");
 dateInput.addEventListener("focus", function () {
   if (this.type !== "date") {
     this.type = "date";
-    setTimeout(() => this.showPicker?.(), 0);
+    setTimeout(() => this.showPicker?.(), 20);
   }
 });
 
 timeInput.addEventListener("focus", function () {
   if (this.type !== "time") {
     this.type = "time";
-    setTimeout(() => this.showPicker?.(), 0);
+    setTimeout(() => this.showPicker?.(), 20);
   }
 });
 
